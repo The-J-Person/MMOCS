@@ -1,2 +1,2 @@
 # MMOCS
-"Massive" Multiplayer Online Crafting-Survival
+"Massive" Multiplayer Online Crafting-Survival : Server Software
