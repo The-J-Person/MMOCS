@@ -4,10 +4,13 @@
 package server;
 
 /**
- *
- *
+ * A class to represent coordinates. 
+ * Used by the WorldMap class.
  */
 public class Coordinate {
+	/*
+	 * the Coordinates are in x,y format (horizontal then vertical)
+	 */
 	long x,y;
 	
 	/**
@@ -36,18 +39,12 @@ public class Coordinate {
 	 * 
 	 * @return the X-axis coordinate
 	 */
-	public long X()
-	{
-		return x;
-	}
+	public long X() { return x; }
 	
 	/**
 	 * 
 	 * @return the Y-axis coordinate
 	 */
-	public long Y()
-	{
-		return y;
-	}
+	public long Y() { return y; }
 		
 }
