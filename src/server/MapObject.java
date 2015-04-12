@@ -5,7 +5,7 @@ package server;
 
 
 public interface MapObject {
-	int Coordinates();
+	Coordinate Coordinates();
 	int Resource();
 	int Health();
 }
