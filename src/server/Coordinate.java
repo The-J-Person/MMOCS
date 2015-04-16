@@ -46,5 +46,14 @@ public class Coordinate {
 	 * @return the Y-axis coordinate
 	 */
 	public long Y() { return y; }
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof Coordinate)) return false;
+		if(((Coordinate)o).X()!=x) return false;
+		if(((Coordinate)o).Y()!=y) return false;
+		return true;
+	}
 		
 }
