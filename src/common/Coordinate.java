@@ -1,7 +1,7 @@
 /**
  * 
  */
-package server;
+package common;
 
 /**
  * A class to represent coordinates. 
