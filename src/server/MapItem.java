@@ -41,4 +41,10 @@ public class MapItem implements MapObject {
 		return 0;
 	}
 
+	@Override
+	public int Damage() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
