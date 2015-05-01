@@ -5,6 +5,8 @@ package server;
 
 import java.util.List;
 
+import common.*;
+
 /**
  *
  *

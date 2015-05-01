@@ -3,6 +3,8 @@
  */
 package server;
 
+import common.*;
+
 /**
  *
  *
