@@ -12,41 +12,55 @@ public class Tile {
 	MapObjectType mo;
 	Coordinate c;
 	
-	Tile(){
+	public Tile(){
 		f = null;
 		mo = null;
 		c = new Coordinate(0,0);
 	}
 
-	Tile(long x, long y){
+	public Tile(long x, long y){
 		f = null;
 		mo = null;
 		c = new Coordinate(x,y);
 	}
 	
-	Tile(long x, long y, FloorType ft, MapObjectType mot){
+	public Tile(Coordinate co){
+		f = null;
+		mo = null;
+		c = co;
+	}
+	
+	public Tile(long x, long y, FloorType ft, MapObjectType mot){
 		f = ft;
 		mo = mot;
 		c = new Coordinate(x,y);
 	}
 	
-	void setFloorType(FloorType ft)
+	public void setFloorType(FloorType ft)
 	{
 		f=ft;
 	}
 	
-	void setMapObjectType(MapObjectType mot)
+	public void setMapObjectType(MapObjectType mot)
 	{
 		mo=mot;
 	}
 	
-	MapObjectType getMapObjectType()
+	public MapObjectType getMapObjectType()
 	{
 		return mo;
 	}
 	
-	FloorType getFloorType()
+	public FloorType getFloorType()
 	{
 		return f;
+	}
+	
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof Tile)) return false;
+		if(((Tile)o).c.X()!=c.X()) return false;
+		if(((Tile)o).c.Y()!=c.Y()) return false;
+		return true;
 	}
 }
