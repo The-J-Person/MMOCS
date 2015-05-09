@@ -35,7 +35,6 @@ public class DataBase {
      
 	/**
 	 * Update current HP of monster after a fight
-	 * return 1 if monster is still alive, 0 if dead
 	 */
 	public static SQLOutput UpdateMosterHP (int ID, int damage)
 	{
