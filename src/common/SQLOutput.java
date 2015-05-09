@@ -3,5 +3,8 @@ package common;
 public enum SQLOutput {
 	SQL_ERROR,
 	NOT_FOUND,
-	EXISTS
+	EXISTS,
+	OK,
+	YES,
+	NO
 }
