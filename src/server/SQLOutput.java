@@ -1,4 +1,4 @@
-package common;
+package server;
 
 public enum SQLOutput {
 	SQL_ERROR,

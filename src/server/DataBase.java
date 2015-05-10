@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.*;
 
 import common.*;
-import common.SQLOutput;
 
 /**
  * 
@@ -265,9 +264,9 @@ public class DataBase {
 		return lst;
 	}
 	
-public static void main(String[] args) {
-		
-		SQLOutput r = UpdateMosterHP(1,1);
-		System.out.println(r);
-	}
+//public static void main(String[] args) {
+//		
+//		SQLOutput r = UpdateMosterHP(1,1);
+//		System.out.println(r);
+//	}
 }
