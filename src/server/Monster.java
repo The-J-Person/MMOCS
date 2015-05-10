@@ -1,4 +1,4 @@
-package common;
+package server;
 
 public class Monster {
 	int ID,Type,MaxHP,X,Y,CurrentHP,Hunger;
