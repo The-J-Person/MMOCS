@@ -243,6 +243,29 @@ public class DataBase {
 		}
 	}
 	
+	public static SQLOutput RemoveEquipment(int ID, Equipment eq)
+	{
+		try{
+			SQLOutput flag = SQLOutput.OK;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Remove_Equipment(?,?,?)}");
+			prc.setInt(1,ID);
+			prc.setInt(2, eq.getID());
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(3);
+			if(result == 0)
+				flag =  SQLOutput.NOT_FOUND;
+			else if(result == 1)
+				flag = SQLOutput.OK;
+			con.close();
+			return flag;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return SQLOutput.SQL_ERROR;
+		}
+	}
+	
 	public static List<FloorType> get_possible_neighbors(Tile t)
 	{
 		//TODO Stub for map generation
