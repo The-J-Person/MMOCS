@@ -293,10 +293,34 @@ public class DataBase {
 		return lst;
 	}
 	
-	//public static void main(String[] args) {
+	public static SQLOutput AddUser(String UserName,String Password, String Salt, String eMail,String UserIMG, String ActivationCode)
+	{
+		try{
+			SQLOutput flag = SQLOutput.OK;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Add_User(?,?,?,?,?,?,?)}");
+			prc.setString(1, UserName);
+			prc.setString(2, Password);
+			prc.setString(3, Salt);
+			prc.setString(4, eMail);
+			prc.setString(5, UserIMG);
+			prc.setString(6, ActivationCode);
+			prc.registerOutParameter(7, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(7);
+			if(result == 0)
+				flag =  SQLOutput.EXISTS;
+			con.close();
+			return flag;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return SQLOutput.SQL_ERROR;
+		}
+	}
+	
+	public static void main(String[] args) {
 		
 		
-		//	Monster monst = new Monster(1,1,1,-1,1,1);
-		//	System.out.println(GetMonster(1,1));
-	//}
+			System.out.println(AddUser("asd","asd","asd","asd","asd","asd"));
+	}
 }
