@@ -1,26 +1,20 @@
 package server;
 
 public class Monster {
-	int ID,Type,MaxHP,X,Y,CurrentHP,Hunger;
+	int Type,MaxHP,X,Y,CurrentHP,Hunger;
 	
 	public String toString()
 	{
-		return Integer.toString(ID) + " " + Integer.toString(Type)+ " " + Integer.toString(MaxHP)+ " " + Integer.toString(X)+ " " + Integer.toString(Y)+ " " + Integer.toString(CurrentHP)+ " " + Integer.toString(Hunger);
+		return Integer.toString(Type)+ " " + Integer.toString(MaxHP)+ " " + Integer.toString(X)+ " " + Integer.toString(Y)+ " " + Integer.toString(CurrentHP)+ " " + Integer.toString(Hunger);
 	}
-	public Monster(int ID,int Type,int MaxHP,int X,int Y,int CurrentHP,int Hunger)
+	public Monster(int Type,int MaxHP,int X,int Y,int CurrentHP,int Hunger)
 	{
-		this.ID = ID;
 		this.Type = Type;
 		this.MaxHP = MaxHP;
 		this.X = X;
 		this.Y = Y;
 		this.CurrentHP = CurrentHP;
 		this.Hunger = Hunger;
-	}
-	
-	public int getID()
-	{
-		return this.ID;
 	}
 	
 	public int getType()
@@ -51,11 +45,6 @@ public class Monster {
 	public int getHunger()
 	{
 		return this.Hunger;
-	}
-	
-	public void setID(int ID)
-	{
-		this.ID = ID;
 	}
 	
 	public void setType(int Type)
