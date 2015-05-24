@@ -3,6 +3,10 @@ package server;
 public class Monster {
 	int ID,Type,MaxHP,X,Y,CurrentHP,Hunger;
 	
+	public String toString()
+	{
+		return Integer.toString(ID) + " " + Integer.toString(Type)+ " " + Integer.toString(MaxHP)+ " " + Integer.toString(X)+ " " + Integer.toString(Y)+ " " + Integer.toString(CurrentHP)+ " " + Integer.toString(Hunger);
+	}
 	public Monster(int ID,int Type,int MaxHP,int X,int Y,int CurrentHP,int Hunger)
 	{
 		this.ID = ID;

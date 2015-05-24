@@ -13,6 +13,10 @@ public class Coordinate {
 	 */
 	long x,y;
 	
+	public String toString()
+	{
+		return Long.toString(x) + " " + Long.toString(y);
+	}
 	/**
 	 * Creates a coordinate 
 	 * @param X axis, and

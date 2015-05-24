@@ -39,7 +39,7 @@ public class DataBase {
 	/**
 	 * Update current HP of monster after a fight
 	 */
-	public static SQLOutput UpdateMosterHP (int ID, int damage)
+	public static SQLOutput UpdateMonsterHP (int ID, int damage)
 	{
 		try{
 			SQLOutput flag = SQLOutput.EXISTS;
@@ -124,6 +124,8 @@ public class DataBase {
 			int result = prc.getInt(8);
 			if(result == 0)
 				flag =  SQLOutput.EXISTS;
+			else if(result == 2)
+				flag = SQLOutput.NO;
 			else
 				flag = SQLOutput.OK;
 			con.close();
@@ -138,7 +140,7 @@ public class DataBase {
 	{
 		try{
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{Get_Monster(?,?,?,?,?,?,?)}");
+			CallableStatement prc = con.prepareCall("{call Get_Monster(?,?,?,?,?,?,?,?)}");
 			prc.registerOutParameter(1, Types.INTEGER);
 			prc.registerOutParameter(2, Types.INTEGER);
 			prc.registerOutParameter(3, Types.INTEGER);
@@ -175,6 +177,7 @@ public class DataBase {
 			prc.setInt(1,ID);
 			prc.registerOutParameter(2, Types.INTEGER);
 			prc.registerOutParameter(3, Types.INTEGER);
+			prc.registerOutParameter(4, Types.INTEGER);
 			prc.execute();
 			int X = prc.getInt(2);
 			int Y = prc.getInt(3);
@@ -220,13 +223,13 @@ public class DataBase {
 		}
 	}
 	
-	public static SQLOutput AddEqipment(int ID, Equipment eq)
+	public static SQLOutput AddEqipmentToPlayer(int UID, Equipment eq)
 	{
 		try{
 			SQLOutput flag = SQLOutput.OK;
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Add_Equipment(?,?,?)}");
-			prc.setInt(1,ID);
+			CallableStatement prc = con.prepareCall("{call Add_Equipment_To_Player(?,?,?)}");
+			prc.setInt(1,UID);
 			prc.setInt(2, eq.getID());
 			prc.registerOutParameter(3, Types.INTEGER);
 			prc.execute();
@@ -235,6 +238,8 @@ public class DataBase {
 				flag =  SQLOutput.NOT_FOUND;
 			else if(result == 1)
 				flag = SQLOutput.EXISTS;
+			else
+				flag = SQLOutput.OK;
 			con.close();
 			return flag;
 		} catch (SQLException e) {
@@ -243,13 +248,13 @@ public class DataBase {
 		}
 	}
 	
-	public static SQLOutput RemoveEquipment(int ID, Equipment eq)
+	public static SQLOutput RemoveEquipmentFromPlayer(int UID, Equipment eq)
 	{
 		try{
 			SQLOutput flag = SQLOutput.OK;
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Remove_Equipment(?,?,?)}");
-			prc.setInt(1,ID);
+			CallableStatement prc = con.prepareCall("{call Remove_Equipment_From_Player(?,?,?)}");
+			prc.setInt(1,UID);
 			prc.setInt(2, eq.getID());
 			prc.registerOutParameter(3, Types.INTEGER);
 			prc.execute();
@@ -258,6 +263,8 @@ public class DataBase {
 				flag =  SQLOutput.NOT_FOUND;
 			else if(result == 1)
 				flag = SQLOutput.OK;
+			else
+				flag = SQLOutput.NO;
 			con.close();
 			return flag;
 		} catch (SQLException e) {
@@ -287,9 +294,11 @@ public class DataBase {
 		return lst;
 	}
 	
-//public static void main(String[] args) {
-//		
-//		SQLOutput r = UpdateMosterHP(1,1);
-//		System.out.println(r);
-//	}
+	//public static void main(String[] args) {
+		
+	//	Equipment a = new Equipment(1,"qwe","qwe");
+	//	Equipment b = new Equipment(2,"asd","asd");
+	//	System.out.println(RemoveEquipmentFromPlayer(1,a));
+	//	System.out.println(AddEqipmentToPlayer(2,b));
+	//}
 }
