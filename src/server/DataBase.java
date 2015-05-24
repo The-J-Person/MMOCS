@@ -111,17 +111,16 @@ public class DataBase {
 		try{
 			SQLOutput flag = SQLOutput.EXISTS;
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Add_Monster(?,?,?,?,?,?,?,?)}");
-			prc.setInt(1,mnst.getID());
-			prc.setInt(2,mnst.getType());
-			prc.setInt(3,mnst.getMaxHP());
-			prc.setInt(4,mnst.getX());
-			prc.setInt(5,mnst.getY());
-			prc.setInt(6,mnst.getCurrentHP());
-			prc.setInt(7,mnst.getHunger());
-			prc.registerOutParameter(8, Types.INTEGER);
+			CallableStatement prc = con.prepareCall("{call Add_Monster(?,?,?,?,?,?,?)}");
+			prc.setInt(1,mnst.getType());
+			prc.setInt(2,mnst.getMaxHP());
+			prc.setInt(3,mnst.getX());
+			prc.setInt(4,mnst.getY());
+			prc.setInt(5,mnst.getCurrentHP());
+			prc.setInt(6,mnst.getHunger());
+			prc.registerOutParameter(7, Types.INTEGER);
 			prc.execute();
-			int result = prc.getInt(8);
+			int result = prc.getInt(7);
 			if(result == 0)
 				flag =  SQLOutput.EXISTS;
 			else if(result == 2)
@@ -140,17 +139,16 @@ public class DataBase {
 	{
 		try{
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Get_Monster(?,?,?,?,?,?,?,?)}");
+			CallableStatement prc = con.prepareCall("{call Get_Monster(?,?,?,?,?,?,?)}");
 			prc.registerOutParameter(1, Types.INTEGER);
 			prc.registerOutParameter(2, Types.INTEGER);
-			prc.registerOutParameter(3, Types.INTEGER);
-			prc.setInt(4,x);
-			prc.setInt(5,y);
+			prc.setInt(3,x);
+			prc.setInt(4,y);
+			prc.registerOutParameter(5, Types.INTEGER);
 			prc.registerOutParameter(6, Types.INTEGER);
 			prc.registerOutParameter(7, Types.INTEGER);
-			prc.registerOutParameter(8, Types.INTEGER);
 			prc.execute();
-			int result = prc.getInt(8);
+			int result = prc.getInt(7);
 			if(result == 0)
 			{
 				con.close();
@@ -158,7 +156,7 @@ public class DataBase {
 			}
 			else
 			{
-				Monster mnst = new Monster(prc.getInt(1),prc.getInt(2),prc.getInt(3),x,y,prc.getInt(6),prc.getInt(7));
+				Monster mnst = new Monster(prc.getInt(1),prc.getInt(2),x,y,prc.getInt(5),prc.getInt(6));
 				con.close();
 				return mnst;
 			}
@@ -167,7 +165,7 @@ public class DataBase {
 			return null;
 		}
 	}
-	
+	/*
 	public static Coordinate GetMonsterCoordinate(int ID)
 	{
 		try{
@@ -193,14 +191,14 @@ public class DataBase {
 			return null;
 		}
 	}
-	
-	public static List<Equipment> GetEquipment(int ID)
+	*/
+	public static List<Equipment> GetEquipment(int UID)
 	{
 		List<Equipment> Eqp = null;
 		try{
 			Connection con = get_connection();
 			CallableStatement prc = con.prepareCall("{call Get_Equipment_Of_Player(?,?)}");
-			prc.setInt(1,ID);
+			prc.setInt(1,UID);
 			prc.registerOutParameter(2, Types.INTEGER);
 			prc.execute();
 			int Result = prc.getInt(2);
@@ -295,10 +293,10 @@ public class DataBase {
 		return lst;
 	}
 	
-//	public static void main(String[] args) {
-//		
-//		Equipment a = new Equipment(1,"qwe","qwe");
-//		Equipment b = new Equipment(2,"asd","asd");
-//		System.out.println(GetEquipment(1));
-//	}
+	//public static void main(String[] args) {
+		
+		
+		//	Monster monst = new Monster(1,1,1,-1,1,1);
+		//	System.out.println(GetMonster(1,1));
+	//}
 }
