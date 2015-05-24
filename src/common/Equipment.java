@@ -6,6 +6,11 @@ public class Equipment {
 	String Name;
 	String Image;
 	
+	public String toString()
+	{
+		return Integer.toString(ID) + " " + Name + " " + Image;
+	}
+	
 	public Equipment(int ID, String Name, String Image)
 	{
 		this.ID = ID;

@@ -196,19 +196,20 @@ public class DataBase {
 	
 	public static List<Equipment> GetEquipment(int ID)
 	{
-		List<Equipment> Eqp = new ArrayList<Equipment>();
+		List<Equipment> Eqp = null;
 		try{
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Get_Equipment(?,?)}");
+			CallableStatement prc = con.prepareCall("{call Get_Equipment_Of_Player(?,?)}");
 			prc.setInt(1,ID);
 			prc.registerOutParameter(2, Types.INTEGER);
 			prc.execute();
-			int Result = prc.getInt(4);
+			int Result = prc.getInt(2);
 			ResultSet Res = prc.getResultSet();
 			if(Result == 0)
 				return Eqp;
 			else
 				{
+				Eqp = new ArrayList<Equipment>();
 					while(Res.next())
 					{
 						Eqp.add(new Equipment(Res.getInt(1),Res.getString(2),Res.getString(3)));
@@ -294,11 +295,10 @@ public class DataBase {
 		return lst;
 	}
 	
-	//public static void main(String[] args) {
+	public static void main(String[] args) {
 		
-	//	Equipment a = new Equipment(1,"qwe","qwe");
-	//	Equipment b = new Equipment(2,"asd","asd");
-	//	System.out.println(RemoveEquipmentFromPlayer(1,a));
-	//	System.out.println(AddEqipmentToPlayer(2,b));
-	//}
+		Equipment a = new Equipment(1,"qwe","qwe");
+		Equipment b = new Equipment(2,"asd","asd");
+		System.out.println(GetEquipment(1));
+	}
 }
