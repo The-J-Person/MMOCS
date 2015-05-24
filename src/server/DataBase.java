@@ -295,10 +295,10 @@ public class DataBase {
 		return lst;
 	}
 	
-	public static void main(String[] args) {
-		
-		Equipment a = new Equipment(1,"qwe","qwe");
-		Equipment b = new Equipment(2,"asd","asd");
-		System.out.println(GetEquipment(1));
-	}
+//	public static void main(String[] args) {
+//		
+//		Equipment a = new Equipment(1,"qwe","qwe");
+//		Equipment b = new Equipment(2,"asd","asd");
+//		System.out.println(GetEquipment(1));
+//	}
 }

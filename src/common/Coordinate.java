@@ -1,6 +1,3 @@
-/**
- * 
- */
 package common;
 
 /**
@@ -13,10 +10,6 @@ public class Coordinate {
 	 */
 	long x,y;
 	
-	public String toString()
-	{
-		return Long.toString(x) + " " + Long.toString(y);
-	}
 	/**
 	 * Creates a coordinate 
 	 * @param X axis, and
@@ -51,6 +44,8 @@ public class Coordinate {
 	 */
 	public long Y() { return y; }
 	
+	public void setX(long x) { this.x = x;}
+	public void setY(long y) { this.y = y;}
 	@Override
 	public boolean equals(Object o)
 	{

@@ -1,12 +1,9 @@
-/**
- * 
- */
 package common;
 
 /**
- *
- *
- */
+*
+*
+*/
 public enum FloorType {
 	GRASS,
 	DIRT,
@@ -15,5 +12,11 @@ public enum FloorType {
 	SAND,
 	STONE,
 	WOOD,
-	STONE_BRICK
+	STONE_BRICK;
+	
+	public boolean canMoveOn(){
+		return this != WATER;
+	}
 }
+
+

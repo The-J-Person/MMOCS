@@ -1,6 +1,3 @@
-/**
- * 
- */
 package common;
 
 /**
@@ -56,11 +53,32 @@ public class Tile {
 		return f;
 	}
 	
+	public Coordinate getCoordinate()
+	{
+		return c;
+	}
+	
 	public boolean equals(Object o)
 	{
 		if(!(o instanceof Tile)) return false;
 		if(((Tile)o).c.X()!=c.X()) return false;
 		if(((Tile)o).c.Y()!=c.Y()) return false;
 		return true;
+	}
+	
+	public boolean canMoveOn(){
+		return (f.canMoveOn() && mo.canMoveOn());
+	}
+	
+	public boolean canPickUp(){
+		return mo.canPickUp();
+	}
+	
+	public boolean canHarvest(){ 
+		return mo.canHarvest();
+	}
+	
+	public boolean canAttack(){
+		return mo.canAttack();
 	}
 }
