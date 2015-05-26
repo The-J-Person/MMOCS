@@ -11,6 +11,7 @@ import common.*;
  */
 public class Player implements MapObject {
 	
+	public static final int distance=5;
 	Coordinate C;
 	int Health;
 	int ID;
@@ -38,14 +39,13 @@ public class Player implements MapObject {
 	 */
 	@Override
 	public int Health() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Health;
 	}
 
 	@Override
 	public int Damage() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 }

@@ -12,7 +12,8 @@ public enum FloorType {
 	SAND,
 	STONE,
 	WOOD,
-	STONE_BRICK;
+	STONE_BRICK,
+	DOOR;
 	
 	public boolean canMoveOn(){
 		return this != WATER;
