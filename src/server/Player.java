@@ -4,6 +4,7 @@
 package server;
 
 import common.*;
+import java.util.*;
 
 /**
  *
@@ -11,7 +12,9 @@ import common.*;
  */
 public class Player implements MapObject {
 	
+	public static final int distance=5;
 	Coordinate C;
+	List<Resource> Inventory = new ArrayList<Resource>();
 	int Health;
 	int ID;
 	
@@ -38,14 +41,23 @@ public class Player implements MapObject {
 	 */
 	@Override
 	public int Health() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Health;
+	}
+	
+	public void setHealth(int nHealth)
+	{
+		Health=nHealth;
+	}
+	
+	public int view_distance()
+	{
+		return distance;
 	}
 
 	@Override
 	public int Damage() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 }
