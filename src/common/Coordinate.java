@@ -48,7 +48,7 @@ public class Coordinate {
 	public void setY(long y) { this.y = y;}
 	
 	/**
-	 * Returns
+	 * Returns single-dimensional distance because our screens are square.
 	 */
 	public int distance(Coordinate other)
 	{
