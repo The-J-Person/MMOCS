@@ -323,4 +323,17 @@ public class DataBase {
 		
 			System.out.println(AddUser("asd","asd","asd","asd","asd","asd"));
 	}
+	//---------------------------------------------------------------------------------------------------------
+	// new function for BataBase "Grisha you need to finish them !!!!!"
+	public static SQLOutput LoginFun(String u , String p ){
+		//function must check if user exists in DB. if yes return true else false.
+		return null;
+	}
+	
+	public static SQLOutput ConfirmFun(String con)
+	//function must check if confirm code is same to the one in DB. if yes return true else false.
+	{return null;}
+	//---------------------------------------------------------------------------------------------------------
+	
 }
+
