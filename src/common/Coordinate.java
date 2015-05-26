@@ -46,6 +46,16 @@ public class Coordinate {
 	
 	public void setX(long x) { this.x = x;}
 	public void setY(long y) { this.y = y;}
+	
+	/**
+	 * Returns
+	 */
+	public int distance(Coordinate other)
+	{
+		long res=Math.max(Math.abs(x-other.x),Math.abs(y-other.y));
+		if(res>Integer.MAX_VALUE) return Integer.MAX_VALUE;
+		return (int)res;
+	}
 	@Override
 	public boolean equals(Object o)
 	{
