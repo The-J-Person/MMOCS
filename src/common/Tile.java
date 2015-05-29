@@ -1,10 +1,13 @@
 package common;
 
+import java.io.Serializable;
+
 /**
  * Represents single tile within map.
  *
  */
-public class Tile {
+public class Tile implements Serializable {
+	static final long serialVersionUID = 328328312;
 	FloorType f;
 	MapObjectType mo;
 	Coordinate c;
@@ -67,18 +70,18 @@ public class Tile {
 	}
 	
 	public boolean canMoveOn(){
-		return (f.canMoveOn() && mo.canMoveOn());
+		return (f != null && f.canMoveOn()) && (mo == null || mo.canMoveOn());
 	}
 	
 	public boolean canPickUp(){
-		return mo.canPickUp();
+		return (mo != null && mo.canPickUp());
 	}
 	
 	public boolean canHarvest(){ 
-		return mo.canHarvest();
+		return (mo != null && mo.canHarvest());
 	}
 	
 	public boolean canAttack(){
-		return mo.canAttack();
+		return (mo != null && mo.canAttack());
 	}
 }

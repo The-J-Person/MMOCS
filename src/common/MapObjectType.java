@@ -6,7 +6,6 @@ package common;
  *
  */
 public enum MapObjectType {
-	NONE, // it really is nothing
 	PLAYER, //Identification of player's own self and other players.
 	PILE, //Group of objects occupying same tile
 	MONSTER,
@@ -16,8 +15,10 @@ public enum MapObjectType {
 	WALL_WOOD,
 	WALL_STONE;
 	
+	static final long serialVersionUID = 8975595;
+	
 	public boolean canMoveOn(){
-		return this == NONE || this == PILE;
+		return this == PILE;
 	}
 	public boolean canPickUp(){
 		return this == PILE;

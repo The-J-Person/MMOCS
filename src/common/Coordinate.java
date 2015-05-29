@@ -1,10 +1,13 @@
 package common;
 
+import java.io.Serializable;
+
 /**
  * A class to represent coordinates. 
  * Used by the WorldMap class.
  */
-public class Coordinate {
+public class Coordinate implements Serializable{
+	static final long serialVersionUID = 12301132;
 	/*
 	 * the Coordinates are in x,y format (horizontal then vertical)
 	 */
@@ -15,17 +18,18 @@ public class Coordinate {
 	 * @param X axis, and
 	 * @param Y axis
 	 */
+	public Coordinate()
+	{
+		x=0;
+		y=0;
+	}
+	
 	public Coordinate(long X, long Y)
 	{
 		x=X;
 		y=Y;
 	}
 	
-	public Coordinate(Coordinate other) {
-		x=other.x;
-		y=other.y;
-	}
-
 	/**
 	 * Sets a coordinate 
 	 * @param X axis, and
@@ -51,16 +55,6 @@ public class Coordinate {
 	
 	public void setX(long x) { this.x = x;}
 	public void setY(long y) { this.y = y;}
-	
-	/**
-	 * Returns single-dimensional distance because our screens are square.
-	 */
-	public int distance(Coordinate other)
-	{
-		long res=Math.max(Math.abs(x-other.x),Math.abs(y-other.y));
-		if(res>Integer.MAX_VALUE) return Integer.MAX_VALUE;
-		return (int)res;
-	}
 	@Override
 	public boolean equals(Object o)
 	{
