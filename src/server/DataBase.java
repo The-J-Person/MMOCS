@@ -373,14 +373,38 @@ public class DataBase {
 			CallableStatement prc = con.prepareCall("{call Set_Tile(?,?,?,?)}");
 			prc.setLong(1, tile.getCoordinate().X());
 			prc.setLong(2, tile.getCoordinate().Y());
-			prc.setInt(3,tile.getFloorType().ordinal());
-			prc.setInt(4,tile.getMapObjectType().ordinal());
-			prc.registerOutParameter(3, Types.INTEGER);
+			prc.setInt(3,tile.getFloorType().getID());
+			prc.setInt(4,tile.getMapObjectType().getID());
 			prc.execute();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String GetSalt(String Username)
+	{
+		try{
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Get_Salt(?,?)}");
+			prc.setString(1, Username);
+			prc.registerOutParameter(2, Types.VARCHAR);
+			prc.execute();
+			String str = prc.getString(2);
+			con.close();
+			if(str.length() == 0)
+				return null;
+			else
+				return str;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static void main(String[] args) 
+	{
+			System.out.println(GetSalt("asd"));
 	}
 	
 }
