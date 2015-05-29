@@ -40,7 +40,7 @@ public class Server extends Thread {
 			int i = 0; // counter for connected clients.
 
 			// Connect socket to localhost , port 8080
-			ServerSocket m_ServerSocket = new ServerSocket(66666);
+			ServerSocket m_ServerSocket = new ServerSocket(8080);
 			//ServerSocket servers = new ServerSocket(8080, 0,
 				//	InetAddress.getByName("localhost"));
 
@@ -77,9 +77,9 @@ public class Server extends Thread {
 					break;
 
 				case "Confirm":
-					if(common.Access.confirm(to.getCode())){
-						s.close();	//need return message !!!
-					}
+					//if(common.Access.confirm(to.getCode())){
+					//	s.close();	//need return message !!!
+					//}
 					break;
 
 				default:
@@ -114,16 +114,16 @@ public class Server extends Thread {
 
 	public void run() {
 		try {
-			// s = servers.accept(); // maybe must be uncomment !!!
-			InputStream is = s.getInputStream(); // getting data from client
-													// socket
-
-			OutputStream os = s.getOutputStream(); // getting data from server
-													// to client
-
-			// output = new PrintStream(s.getOutputStream());
-
+		
 			while (s.isConnected()) {
+				
+				ObjectInputStream ois = new ObjectInputStream(
+						s.getInputStream());// getting data from client
+											// socket
+
+				ObjectOutputStream oos = new ObjectOutputStream(
+						s.getOutputStream());// getting data from server
+											// to client
 
 				// byte buf[] = new byte[64*1024]; // read 64kb from client. how
 				// much information received from client
