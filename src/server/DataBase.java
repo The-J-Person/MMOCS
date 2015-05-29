@@ -318,11 +318,11 @@ public class DataBase {
 		}
 	}
 	
-	public static void main(String[] args) {
+	//public static void main(String[] args) {
 		
 		
-			System.out.println(AddUser("asd","asd","asd","asd","asd","asd"));
-	}
+	//		System.out.println(AddUser("asd","asd","asd","asd","asd","asd"));
+	//}
 	//---------------------------------------------------------------------------------------------------------
 	// new function for BataBase "Grisha you need to finish them !!!!!"
 	public static SQLOutput LoginFun(String u , String p ){
@@ -330,10 +330,28 @@ public class DataBase {
 		return null;
 	}
 	
-	public static SQLOutput ConfirmFun(String con)
-	//function must check if confirm code is same to the one in DB. if yes return true else false.
-	{return null;}
-	//---------------------------------------------------------------------------------------------------------
+	public static SQLOutput ChangeActivity(String Username, String ActivationCode)
+	{
+		try{
+			SQLOutput flag = SQLOutput.OK;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Change_Activity(?,?,?)}");
+			prc.setString(1, Username);
+			prc.setString(2, ActivationCode);
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(3);
+			if(result == 0)
+				flag =  SQLOutput.NOT_FOUND;
+			else if(result == 1)
+				flag = SQLOutput.NO;
+			con.close();
+			return flag;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return SQLOutput.SQL_ERROR;
+		}
+	}
 	
 }
 
