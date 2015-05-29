@@ -5,11 +5,11 @@ import java.security.SecureRandom;
 import server.DataBase;
 import server.SQLOutput;
 
-public class Acces {
+public class Access {
 
 	String action, User, Pass, Email, code;
 
-	public Acces(String a, String u, String p, String e, String c) {
+	public Access(String a, String u, String p, String e, String c) {
 		this.action = a;
 		this.User = u;
 		this.Pass = p;

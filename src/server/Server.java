@@ -55,9 +55,9 @@ public class Server extends Thread {
 				ObjectOutputStream oos = new ObjectOutputStream(
 						s.getOutputStream());
 
-				Acces to = null;
+				Access to = null;
 				try {
-					to = (Acces) ois.readObject();
+					to = (Access) ois.readObject();
 				} catch (ClassNotFoundException e) {
 					System.out.println("broke");
 					e.printStackTrace();
@@ -65,19 +65,19 @@ public class Server extends Thread {
 
 				switch (to.getAction()) {
 				case "Login":
-					if (common.Acces.login(to.getUser(), to.getPass())) {
+					if (common.Access.login(to.getUser(), to.getPass())) {
 						new Server(i, s);
 						i++;
 					}
 					break;
 				case "New":
-					if(common.Acces.newUser(to.getUser(), to.getPass(), to.getEmail()) == 0){
+					if(common.Access.newUser(to.getUser(), to.getPass(), to.getEmail()) == 0){
 						s.close(); //need return message !!!
 					}
 					break;
 
 				case "Confirm":
-					if(common.Acces.confirm(to.getCode())){
+					if(common.Access.confirm(to.getCode())){
 						s.close();	//need return message !!!
 					}
 					break;

@@ -21,6 +21,11 @@ public class Coordinate {
 		y=Y;
 	}
 	
+	public Coordinate(Coordinate other) {
+		x=other.x;
+		y=other.y;
+	}
+
 	/**
 	 * Sets a coordinate 
 	 * @param X axis, and
