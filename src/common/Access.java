@@ -64,7 +64,7 @@ public class Access {
 	}
 
 	public static Boolean confirm(String u , String con) {	// function checking if confirmation code same to in DB.
-		if (DataBase.ChangeActivity(u , con) == SQLOutput.OK) {
+		if (DataBase.ConfirmFun(u , con) == SQLOutput.OK) {
 			return true;
 		} else {
 			return false;

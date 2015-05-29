@@ -318,19 +318,32 @@ public class DataBase {
 		}
 	}
 	
-	//public static void main(String[] args) {
-		
-		
-	//		System.out.println(AddUser("asd","asd","asd","asd","asd","asd"));
-	//}
-	//---------------------------------------------------------------------------------------------------------
-	// new function for BataBase "Grisha you need to finish them !!!!!"
-	public static SQLOutput LoginFun(String u , String p ){
-		//function must check if user exists in DB. if yes return true else false.
-		return null;
+	public static SQLOutput LoginFun(String Username , String Password )
+	{
+		try{
+			SQLOutput flag = SQLOutput.OK;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Login(?,?,?)}");
+			prc.setString(1, Username);
+			prc.setString(2, Password);
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(3);
+			if(result == 0)
+				flag =  SQLOutput.NOT_FOUND;
+			else if(result == 1)
+				flag = SQLOutput.NO;
+			else if(result == 2)
+				flag = SQLOutput.EXISTS;
+			con.close();
+			return flag;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return SQLOutput.SQL_ERROR;
+		}
 	}
 	
-	public static SQLOutput ChangeActivity(String Username, String ActivationCode)
+	public static SQLOutput ConfirmFun(String Username, String ActivationCode)
 	{
 		try{
 			SQLOutput flag = SQLOutput.OK;
@@ -350,6 +363,23 @@ public class DataBase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return SQLOutput.SQL_ERROR;
+		}
+	}
+	
+	public static void SetTile(Tile tile)
+	{
+		try{
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Set_Tile(?,?,?,?)}");
+			prc.setLong(1, tile.getCoordinate().X());
+			prc.setLong(2, tile.getCoordinate().Y());
+			prc.setInt(3,tile.getFloorType().ordinal());
+			prc.setInt(4,tile.getMapObjectType().ordinal());
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.execute();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
