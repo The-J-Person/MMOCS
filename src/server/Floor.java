@@ -20,9 +20,9 @@ public class Floor implements MapObject {
 	}
 
 	@Override
-	public int Resource() {
+	public common.Resource Resource() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	@Override

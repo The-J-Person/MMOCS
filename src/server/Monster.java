@@ -1,18 +1,20 @@
 package server;
 
+import common.*;
+
 public class Monster {
-	int Type,MaxHP,X,Y,CurrentHP,Hunger;
+	Coordinate c;
+	int Type,MaxHP,CurrentHP,Hunger;
 	
 	public String toString()
 	{
-		return Integer.toString(Type)+ " " + Integer.toString(MaxHP)+ " " + Integer.toString(X)+ " " + Integer.toString(Y)+ " " + Integer.toString(CurrentHP)+ " " + Integer.toString(Hunger);
+		return Integer.toString(Type)+ " " + Integer.toString(MaxHP)+ " " + Integer.toString((int) c.X())+ " " + Integer.toString((int) c.Y())+ " " + Integer.toString(CurrentHP)+ " " + Integer.toString(Hunger);
 	}
 	public Monster(int Type,int MaxHP,int X,int Y,int CurrentHP,int Hunger)
 	{
 		this.Type = Type;
 		this.MaxHP = MaxHP;
-		this.X = X;
-		this.Y = Y;
+		this.c = new Coordinate(X,Y);
 		this.CurrentHP = CurrentHP;
 		this.Hunger = Hunger;
 	}
@@ -27,14 +29,9 @@ public class Monster {
 		return this.MaxHP;
 	}
 	
-	public int getX()
+	public Coordinate getCoordinate()
 	{
-		return this.X;
-	}
-	
-	public int getY()
-	{
-		return this.Y;
+		return c;
 	}
 	
 	public int getCurrentHP()
@@ -57,14 +54,9 @@ public class Monster {
 		this.MaxHP = MaxHP;
 	}
 	
-	public void setX(int X)
+	public void setCoordinate(Coordinate co)
 	{
-		this.X = X;
-	}
-	
-	public void setY(int Y)
-	{
-		this.Y = Y;
+		c = new Coordinate(co);
 	}
 	
 	public void setCurrentHP(int CurrentHP)
@@ -76,4 +68,6 @@ public class Monster {
 	{
 		this.Hunger = Hunger;
 	}
+	
+
 }

@@ -13,8 +13,9 @@ import common.*;
  */
 public class WorldMap {
 	private static WorldMap wm = new WorldMap();
-	private List<Tile> map;
-	private List<Coordinate> loaded;
+//	private List<Tile> map;
+//	private List<Coordinate> loaded;
+	private Hashtable<Coordinate, Tile> map; 
 	
 	private WorldMap()
 	{
@@ -38,9 +39,9 @@ public class WorldMap {
 	 */
 	public Tile get_tile_at(Coordinate c, boolean player)
 	{
-		int index=wm.loaded.indexOf(c);
+		Tile req=map.get(c);
 		
-		if(index==-1)
+		if(req==null)
 		{
 			if(player)
 			{
@@ -74,15 +75,14 @@ public class WorldMap {
 				/* Generate */
 				Tile generated = generate_tile(c,neighbors);
 				/* Update DB */
-				loaded.add(c);
-				map.add(generated);
+				map.put(c,generated);
 				//TODO update DB
 				/* Return generated Tile */
 				return generated;
 			}
 			else return null;
 		}
-		return (Tile)(wm.map.toArray()[index]);//Correct floor?
+		return map.get(c);//Correct floor?
 	}
 	
 	/**
@@ -115,4 +115,8 @@ public class WorldMap {
 		return nt;
 	}
 	
+	public void update_tile(Tile t)
+	{
+		map.put(t.getCoordinate(), t);
+	}
 }
