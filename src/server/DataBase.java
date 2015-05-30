@@ -492,5 +492,50 @@ public class DataBase {
 		}
 	}
 	
+	public static Hashtable<Coordinate, Tile> GetMap()
+	{
+		try{
+			Hashtable<Coordinate, Tile> Map = new Hashtable<Coordinate, Tile>();
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Get_Map()}");
+			prc.execute();
+			ResultSet Res = prc.getResultSet();
+			while(Res.next())
+			{
+				if(Res.getInt(4) != -1)
+					Map.put(new Coordinate(Res.getInt(1),Res.getInt(2)),new Tile(new Coordinate(Res.getInt(1),Res.getInt(2)),FloorType.values()[Res.getInt(3)],MapObjectType.values()[Res.getInt(4)]));
+				else
+					Map.put(new Coordinate(Res.getInt(1),Res.getInt(2)),new Tile(new Coordinate(Res.getInt(1),Res.getInt(2)),FloorType.values()[Res.getInt(3)],null));
+			}
+			Res.close();
+			con.close();
+			return Map;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	//public static void main(String[] args)
+	//{
+	//	Hashtable<Coordinate, Tile> Map = GetMap();
+	//	System.out.println(Map.get(new Coordinate(0,0)).getCoordinate().X());
+	//	System.out.println(Map.get(new Coordinate(0,0)).getCoordinate().Y());
+	//	System.out.println(Map.get(new Coordinate(0,0)).getFloorType());
+	//	System.out.println(Map.get(new Coordinate(0,0)).getMapObjectType());
+	//	System.out.println(Map.get(new Coordinate(0,1)).getCoordinate().X());
+	//	System.out.println(Map.get(new Coordinate(0,1)).getCoordinate().Y());
+	//	System.out.println(Map.get(new Coordinate(0,1)).getFloorType());
+	//	System.out.println(Map.get(new Coordinate(0,1)).getMapObjectType());
+	//	System.out.println(Map.get(new Coordinate(1,0)).getCoordinate().X());
+	//	System.out.println(Map.get(new Coordinate(1,0)).getCoordinate().Y());
+	//	System.out.println(Map.get(new Coordinate(1,0)).getFloorType());
+	//	System.out.println(Map.get(new Coordinate(1,0)).getMapObjectType());
+	//	System.out.println(Map.get(new Coordinate(1,1)).getCoordinate().X());
+	//	System.out.println(Map.get(new Coordinate(1,1)).getCoordinate().Y());
+	//	System.out.println(Map.get(new Coordinate(1,1)).getFloorType());
+	//	System.out.println(Map.get(new Coordinate(1,1)).getMapObjectType());
+	//}
+	
 }
 
