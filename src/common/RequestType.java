@@ -8,7 +8,9 @@ public enum RequestType {
 	LOG_OUT,
 	REGISTER,
 	CRAFT,
-	TILE;
+	TILE,
+	UPDATE_TILE,
+	CONFIRM;
 	
 	static final long serialVersionUID = 12142322;
 }
