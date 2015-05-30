@@ -330,9 +330,9 @@ public class DataBase {
 			int result = prc.getInt(3);
 			if(result == 0)
 				result = -1;
-			else if(result == 1)
+			else if(result == -1)
 				result = -2;
-			else if(result == 2)
+			else if(result == -2)
 				result = -3;
 			con.close();
 			return result;
