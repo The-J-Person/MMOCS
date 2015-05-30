@@ -115,6 +115,8 @@ public class Server extends Thread {
 
 	public void run() {
 		try {
+			
+			Player pl = new Player((Player));
 		
 			while (s.isConnected()) {
 				
