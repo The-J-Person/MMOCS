@@ -474,5 +474,23 @@ public class DataBase {
 		}
 	}
 	
+	public static int GetPlayerCoordByID(Coordinate coord)
+	{
+		try{
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Get_coord_By_ID(?,?,?)}");
+			prc.setLong(1, coord.X());
+			prc.setLong(2, coord.Y());
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(3);
+			con.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
 }
 
