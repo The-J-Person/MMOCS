@@ -139,16 +139,17 @@ public class DataBase {
 	{
 		try{
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Get_Monster(?,?,?,?,?,?,?)}");
+			CallableStatement prc = con.prepareCall("{call Get_Monster_By_Coordinate(?,?,?,?,?,?,?,?)}");
 			prc.registerOutParameter(1, Types.INTEGER);
 			prc.registerOutParameter(2, Types.INTEGER);
-			prc.setInt(3,x);
-			prc.setInt(4,y);
-			prc.registerOutParameter(5, Types.INTEGER);
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.setInt(4,x);
+			prc.setInt(5,y);
 			prc.registerOutParameter(6, Types.INTEGER);
 			prc.registerOutParameter(7, Types.INTEGER);
+			prc.registerOutParameter(8, Types.INTEGER);
 			prc.execute();
-			int result = prc.getInt(7);
+			int result = prc.getInt(8);
 			if(result == 0)
 			{
 				con.close();
@@ -156,7 +157,7 @@ public class DataBase {
 			}
 			else
 			{
-				Monster mnst = new Monster(prc.getInt(1),prc.getInt(2),x,y,prc.getInt(5),prc.getInt(6));
+				Monster mnst = new Monster(prc.getInt(1),prc.getInt(2),prc.getInt(3),x,y,prc.getInt(6),prc.getInt(7));
 				con.close();
 				return mnst;
 			}
@@ -516,26 +517,35 @@ public class DataBase {
 		}
 	}
 	
-	//public static void main(String[] args)
-	//{
-	//	Hashtable<Coordinate, Tile> Map = GetMap();
-	//	System.out.println(Map.get(new Coordinate(0,0)).getCoordinate().X());
-	//	System.out.println(Map.get(new Coordinate(0,0)).getCoordinate().Y());
-	//	System.out.println(Map.get(new Coordinate(0,0)).getFloorType());
-	//	System.out.println(Map.get(new Coordinate(0,0)).getMapObjectType());
-	//	System.out.println(Map.get(new Coordinate(0,1)).getCoordinate().X());
-	//	System.out.println(Map.get(new Coordinate(0,1)).getCoordinate().Y());
-	//	System.out.println(Map.get(new Coordinate(0,1)).getFloorType());
-	//	System.out.println(Map.get(new Coordinate(0,1)).getMapObjectType());
-	//	System.out.println(Map.get(new Coordinate(1,0)).getCoordinate().X());
-	//	System.out.println(Map.get(new Coordinate(1,0)).getCoordinate().Y());
-	//	System.out.println(Map.get(new Coordinate(1,0)).getFloorType());
-	//	System.out.println(Map.get(new Coordinate(1,0)).getMapObjectType());
-	//	System.out.println(Map.get(new Coordinate(1,1)).getCoordinate().X());
-	//	System.out.println(Map.get(new Coordinate(1,1)).getCoordinate().Y());
-	//	System.out.println(Map.get(new Coordinate(1,1)).getFloorType());
-	//	System.out.println(Map.get(new Coordinate(1,1)).getMapObjectType());
-	//}
+	public static Hashtable<Coordinate, Monster> GetMonsters()
+	{
+		try{
+			Hashtable<Coordinate, Monster> monst = new Hashtable<Coordinate, Monster>();
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Get_Monsters()}");
+			prc.execute();
+			ResultSet Res = prc.getResultSet();
+			while(Res.next())
+			{
+				monst.put(new Coordinate(Res.getInt(4) ,Res.getInt(5)), new Monster(Res.getInt(1),Res.getInt(2),Res.getInt(3),Res.getInt(4),Res.getInt(5),Res.getInt(6),Res.getInt(7)));
+			}
+			Res.close();
+			con.close();
+			return monst;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		Hashtable<Coordinate, Monster> Map = GetMonsters();
+		System.out.println(Map.get(new Coordinate(0,0)));
+		System.out.println(Map.get(new Coordinate(0,1)));
+		System.out.println(Map.get(new Coordinate(1,0)));
+		System.out.println(Map.get(new Coordinate(1,1)));
+	}
 	
 }
 
