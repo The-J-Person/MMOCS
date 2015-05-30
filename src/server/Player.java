@@ -11,19 +11,23 @@ import java.util.*;
  *
  */
 public class Player implements MapObject {
-	
+
 	public static final int distance=5;
+	public static final int BaseHealth=10; //Randomly picked
 	Coordinate C;
 	Hashtable<Resource,Integer> Inventory = new Hashtable<Resource,Integer>();
 	boolean admin;
 	int Health;
+	int MaxHealth;
 	int ID;
 	
 	public Player(int id, boolean admn)
 	{
 		ID=id;
 		admin=admn;
-		Health=10; //Randomly picked
+		MaxHealth=BaseHealth;
+		Health=BaseHealth; 
+		C=DataBase.GetPlayerCoordinate(id);
 		//TODO add inventory
 	}
 	
@@ -97,4 +101,42 @@ public class Player implements MapObject {
 		return admin;
 	}
 
+	/**
+	 * Checks if player can see the Tile he asked to see.
+	 * @return
+	 */
+	public boolean see_Tile(Coordinate Co)
+	{
+		if(!admin && Co.distance(C)>distance) return false;
+		return true;
+	}
+	
+	/**
+	 * Checks if player can see the Tile he asked to see.
+	 * @return
+	 */
+	public boolean change_Tile(Tile Ti)
+	{
+		if(!admin && Ti.getCoordinate().distance(C)>distance) return false;
+		//TODO Check inventory
+		WorldMap.getInstance().update_tile(Ti);
+		return true;
+	}
+	
+	/**
+	 * Attack a monster or mapobject
+	 * @param Co
+	 * @return
+	 */
+	public boolean attack(Coordinate Co)
+	{
+		if(!admin && Co.distance(C)>distance) return false;
+		return true;
+	}
+	
+	public boolean gather_ground(Coordinate Co)
+	{
+		if(!admin && Co.distance(C)>distance) return false;
+		return true;
+	}
 }
