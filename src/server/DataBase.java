@@ -165,13 +165,13 @@ public class DataBase {
 			return null;
 		}
 	}
-	/*
-	public static Coordinate GetMonsterCoordinate(int ID)
+	
+	public static Coordinate GetPlayerCoordinate(int ID)
 	{
 		try{
 			Coordinate crdnt = null;
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Get_Monster_Coordinate(?,?,?,?)}");
+			CallableStatement prc = con.prepareCall("{call Get_Player_Coordinate(?,?,?,?)}");
 			prc.setInt(1,ID);
 			prc.registerOutParameter(2, Types.INTEGER);
 			prc.registerOutParameter(3, Types.INTEGER);
@@ -191,7 +191,7 @@ public class DataBase {
 			return null;
 		}
 	}
-	*/
+	
 	public static List<Equipment> GetEquipment(int UID)
 	{
 		List<Equipment> Eqp = null;
@@ -402,6 +402,28 @@ public class DataBase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static SQLOutput UpdatePlayerLocation (int PlayerID, Coordinate cor)
+	{
+		try{
+			SQLOutput flag = SQLOutput.OK;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Update_Player_Location(?,?,?,?)}");
+			prc.setInt(1, PlayerID);
+			prc.setLong(2, cor.X());
+			prc.setLong(3, cor.Y());
+			prc.registerOutParameter(4, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(4);
+			if(result == 0)
+				flag =  SQLOutput.NOT_FOUND;
+			con.close();
+			return flag;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return SQLOutput.SQL_ERROR;
 		}
 	}
 	
