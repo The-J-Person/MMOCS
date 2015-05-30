@@ -2,12 +2,15 @@ package server;
 
 import java.security.SecureRandom;
 
+import common.RequestType;
+
 public class Access {
 
-	String action, User, Pass, Email, code;
+	String User, Pass, Email, code;
+	RequestType action;
 	public static int id;
 
-	public Access(String a, String u, String p, String e, String c) {
+	public Access(RequestType a, String u, String p, String e, String c) {
 		this.action = a;
 		this.User = u;
 		this.Pass = p;
@@ -15,7 +18,7 @@ public class Access {
 		this.code = c;
 	}
 
-	public String getAction() {
+	public RequestType getAction() {
 		return this.action;
 	}
 

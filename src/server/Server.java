@@ -47,38 +47,52 @@ public class Server extends Thread {
 			while(true)
 			{
 				Socket s = m_ServerSocket.accept();
-				ObjectInputStream ois = new ObjectInputStream(
+				ObjectInputStream lois = new ObjectInputStream(
 						s.getInputStream());
 
-				ObjectOutputStream oos = new ObjectOutputStream(
+				ObjectOutputStream loos = new ObjectOutputStream(
 						s.getOutputStream());
 
 				Access to = null;
 				
 				try {
-					to = (Access) ois.readObject();
+					to = (Access) lois.readObject();
 				} catch (ClassNotFoundException e) {
 					System.out.println("broke");
 					e.printStackTrace();
 				}
 
 				switch (to.getAction()) {
-				case "Login":
+				case LOG_IN:
 					//TODO We need to save the user's ID and admin into the new thread
 					//The constructor for this is Player p = new Player(ID,is_admin).
 					if (server.Access.login(to.getUser(), to.getPass())) {
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true,RequestType.LOG_IN)));
+						Player player = server.DataBase.GetPlayerByID(Access.id);
+						loos.writeObject(player.Coordinates());
+						loos.writeObject(player.Health());
+						//TODO must add Inventory param !!!
+						
+						
 						new Server(i, s);
 						i++;
 					}
 					break;
-				case "New":
+				case REGISTER:
 					if(server.Access.newUser(to.getUser(), to.getPass(), to.getEmail()) == 0){
-						s.close(); //need return message !!!
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.REGISTER)));
+						s.close(); 
+					}else{loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.REGISTER)));
+					s.close(); 
 					}
 					break;
 
-				case "Confirm":
+				case CONFIRM:
 					if(server.Access.confirm(to.getUser(),to.getCode())){
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.CONFIRM)));
+						s.close();	//need return message !!!
+					}else{
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.CONFIRM)));
 						s.close();	//need return message !!!
 					}
 					break;
@@ -116,7 +130,9 @@ public class Server extends Thread {
 	public void run() {
 		try {
 			
+			Coordinate co;
 			Player pl = server.DataBase.GetPlayerByID(Access.id);
+			
 		
 			while (s.isConnected()) {
 				
@@ -137,29 +153,53 @@ public class Server extends Thread {
 					switch (re.getType()) {
 					case ATTACK:
 						
-						//up = new Update(type, data);
+						//TODO here must be an function
 						break;
 					case CRAFT:
 						
+						//TODO here must be an function
 						break;
 					case HARVEST:
 						
+						//TODO here must be an function
 						break;
 					case LOG_OUT:
-						
+						oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.LOG_OUT)));
+						s.close();	//need return message !!!
+						if(s.isConnected()){
+							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.LOG_OUT)));
+						}
+							
 						break;
 					case MOVE:
-						Coordinate co = (Coordinate)re.getData();
+						co = (Coordinate)re.getData();
 						if ( pl.Move(co) ){
-							up = new Update(UpdateType.ACKNOWLEDGMENT, null);
+							up = new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.MOVE));
 							oos.writeObject(up);
+						}else{
+							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.MOVE)));
 						}
 						break;
 					case TILE:
-						Coordinate co = (Coordinate)re.getData();
+						co = (Coordinate)re.getData();
+						if(pl.see_Tile(co)){
+							
 						Tile toClient = WorldMap.getInstance().get_tile_at(co,true);
 						up = new Update(UpdateType.TILE, toClient );
 						oos.writeObject(up);
+						}else{
+							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.TILE)));
+						}
+						break;
+					case UPDATE_TILE:
+						co = (Coordinate)re.getData();
+						Tile toChange = WorldMap.getInstance().get_tile_at(co,true);
+						if(pl.change_Tile(toChange)){
+							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.UPDATE_TILE)));
+						}else{
+							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.UPDATE_TILE)));
+						}
+						
 						break;
 
 					default:
