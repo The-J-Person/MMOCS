@@ -5,7 +5,6 @@ import common.*;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -13,7 +12,6 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -56,6 +54,7 @@ public class Server extends Thread {
 						s.getOutputStream());
 
 				Access to = null;
+				
 				try {
 					to = (Access) ois.readObject();
 				} catch (ClassNotFoundException e) {
@@ -77,9 +76,9 @@ public class Server extends Thread {
 					break;
 
 				case "Confirm":
-					//if(common.Access.confirm(to.getCode())){
-					//	s.close();	//need return message !!!
-					//}
+					if(common.Access.confirm(to.getUser(),to.getCode())){
+						s.close();	//need return message !!!
+					}
 					break;
 
 				default:
@@ -124,7 +123,46 @@ public class Server extends Thread {
 				ObjectOutputStream oos = new ObjectOutputStream(
 						s.getOutputStream());// getting data from server
 											// to client
+				Request re = null;
+				Update up = null;
+				
+				re = (Request)ois.readObject();
+				
+				//Update up = (Update)oos.writeObject(obj);
+				try {
+					switch (re.getType()) {
+					case ATTACK:
+						
+						//up = new Update(type, data);
+						break;
+					case CRAFT:
+						
+						break;
+					case HARVEST:
+						
+						break;
+					case LOG_OUT:
+						
+						break;
+					case MOVE:
+						
+						//up = new Update(UpdateType.ACKNOWLEDGMENT, data)
+						break;
+					case TILE:
+						Coordinate co = (Coordinate)re.getData();
+						Tile toClient = WorldMap.getInstance().get_tile_at(co,true);
+						up = new Update(UpdateType.TILE, toClient );
+						oos.writeObject(up);
+						break;
 
+					default:
+						break;
+					}
+					
+				} catch (Exception e) {
+					System.out.print(e.getMessage());
+				}
+				
 				// byte buf[] = new byte[64*1024]; // read 64kb from client. how
 				// much information received from client
 				// int r = is.read(buf);
