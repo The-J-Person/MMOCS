@@ -26,18 +26,12 @@ public enum MapObjectType {
 	{
 		return ID;
 	}
-	
-	public boolean canMoveOn(){
-		return false;
-	}
-	public boolean canPickUp(){
-		return false;
-	}
 	public boolean canAttack(){
 		return this == MONSTER;
 	}
 	public boolean canHarvest(){
-		return (this == TREE || this == BUSH || this == ROCK);
+		//return (this == TREE || this == BUSH || this == ROCK);
+		return (this != PLAYER && this != MONSTER);
 	}
 	
 	public Resource resource()
