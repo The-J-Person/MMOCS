@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 public class Access {
 
 	String action, User, Pass, Email, code;
+	public static int id;
 
 	public Access(String a, String u, String p, String e, String c) {
 		this.action = a;
@@ -36,7 +37,8 @@ public class Access {
 
 	// function will check if client can connect to server.
 	public static boolean login(String u, String p) {
-		if (DataBase.LoginFun(u, p))
+		id =  DataBase.LoginFun(u, p);
+		if (id > 0 )
 			return true;
 		else
 			return false;

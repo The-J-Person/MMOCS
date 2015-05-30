@@ -116,7 +116,7 @@ public class Server extends Thread {
 	public void run() {
 		try {
 			
-			Player pl = new Player((Player));
+			Player pl = server.DataBase.GetPlayerByID(Access.id);
 		
 			while (s.isConnected()) {
 				
@@ -149,8 +149,11 @@ public class Server extends Thread {
 						
 						break;
 					case MOVE:
-						
-						//up = new Update(UpdateType.ACKNOWLEDGMENT, data)
+						Coordinate co = (Coordinate)re.getData();
+						if ( pl.Move(co) ){
+							up = new Update(UpdateType.ACKNOWLEDGMENT, null);
+							oos.writeObject(up);
+						}
 						break;
 					case TILE:
 						Coordinate co = (Coordinate)re.getData();
@@ -166,18 +169,6 @@ public class Server extends Thread {
 				} catch (Exception e) {
 					System.out.print(e.getMessage());
 				}
-				
-				// byte buf[] = new byte[64*1024]; // read 64kb from client. how
-				// much information received from client
-				// int r = is.read(buf);
-				// String data = new String(buf, 0, r); // create data mess
-				// received from client
-				// data = ""+num+": "+"\n"+data; //adding all to data
-				// os.write(data.getBytes()); //print on screen
-				//
-				//
-				// String reply = scan.nextLine();
-				// os.write(reply.getBytes());
 			}
 
 		} catch (Exception e) {
@@ -260,25 +251,5 @@ public class Server extends Thread {
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
-
-		// SQL.add_new_user(blahblah)//This function not implemented yet
 	}
-
-	/*	*//**
-	 * @param args
-	 */
-	/*
-	 * public static void main(String[] args) { // TODO Auto-generated method
-	 * stub // Spawn listener... try { listener(); } catch (IOException e) { //
-	 * TODO Auto-generated catch block e.printStackTrace(); } }
-	 * 
-	 * private static void listener() throws IOException {
-	 * System.out.println("Hi!"); ServerSocket listener = new
-	 * ServerSocket(15001, 1000); try { while (true) { Socket socket =
-	 * listener.accept(); try { Create new thread for each incoming connection
-	 * // PrintWriter out = // new PrintWriter(socket.getOutputStream(), true);
-	 * // out.println("Hello!"); } finally { socket.close(); } } } finally {
-	 * listener.close(); } }
-	 */
-
 }
