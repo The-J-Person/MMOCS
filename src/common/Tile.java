@@ -81,19 +81,15 @@ public class Tile implements Serializable {
 		return true;
 	}
 	
-//	public boolean canMoveOn(){
-//		return (f != null && f.canMoveOn()) && (mo == null || mo.canMoveOn());
-//	}
-//	
-//	public boolean canPickUp(){
-//		return (mo != null && mo.canPickUp());
-//	}
-//	
-//	public boolean canHarvest(){ 
-//		return (mo != null && mo.canHarvest());
-//	}
-//	
-//	public boolean canAttack(){
-//		return (mo != null && mo.canAttack());
-//	}
+	public boolean canMoveOn(){
+		return f != null && f.canMoveOn();
+	}
+	
+	public boolean canHarvest(){ 
+		return (mo != null && mo.canHarvest());
+	}
+	
+	public boolean canAttack(){
+		return (mo != null && mo.canAttack());
+	}
 }
