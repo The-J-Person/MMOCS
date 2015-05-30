@@ -6,6 +6,7 @@ public enum UpdateType {
 	HIT_POINTS,
 	RESOURCES,
 	INVENTORY,
+	EQUIPMENT,
 	COORDINATE;
 	
 	static final long serialVersionUID = 23340012;
