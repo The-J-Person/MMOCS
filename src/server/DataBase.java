@@ -452,5 +452,27 @@ public class DataBase {
 		}
 	}
 	
+	public static Player GetPlayerByID (int UserID)
+	{
+		try{
+			Player plr = null;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Get_Player_By_ID(?,?,?,?)}");
+			prc.setInt(1, UserID);
+			prc.registerOutParameter(2, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(2);
+			if(result == 1)
+				plr = new Player(UserID,false);
+			else if (result == 2)
+				plr = new Player(UserID,true);
+			con.close();
+			return plr;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
 
