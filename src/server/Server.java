@@ -66,19 +66,19 @@ public class Server extends Thread {
 				case "Login":
 					//TODO We need to save the user's ID and admin into the new thread
 					//The constructor for this is Player p = new Player(ID,is_admin).
-					if (common.Access.login(to.getUser(), to.getPass())) {
+					if (server.Access.login(to.getUser(), to.getPass())) {
 						new Server(i, s);
 						i++;
 					}
 					break;
 				case "New":
-					if(common.Access.newUser(to.getUser(), to.getPass(), to.getEmail()) == 0){
+					if(server.Access.newUser(to.getUser(), to.getPass(), to.getEmail()) == 0){
 						s.close(); //need return message !!!
 					}
 					break;
 
 				case "Confirm":
-					if(common.Access.confirm(to.getUser(),to.getCode())){
+					if(server.Access.confirm(to.getUser(),to.getCode())){
 						s.close();	//need return message !!!
 					}
 					break;

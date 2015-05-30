@@ -1,9 +1,6 @@
-package common;
+package server;
 
 import java.security.SecureRandom;
-
-import server.DataBase;
-import server.SQLOutput;
 
 public class Access {
 
@@ -39,7 +36,7 @@ public class Access {
 
 	// function will check if client can connect to server.
 	public static boolean login(String u, String p) {
-		if (DataBase.LoginFun(u, p) == SQLOutput.OK)
+		if (DataBase.LoginFun(u, p))
 			return true;
 		else
 			return false;
