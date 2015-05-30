@@ -374,7 +374,10 @@ public class DataBase {
 			prc.setLong(1, tile.getCoordinate().X());
 			prc.setLong(2, tile.getCoordinate().Y());
 			prc.setInt(3,tile.getFloorType().getID());
-			prc.setInt(4,tile.getMapObjectType().getID());
+			if(tile.getMapObjectType() == null)
+				prc.setInt(4,-1);
+			else
+				prc.setInt(4,tile.getMapObjectType().getID());
 			prc.execute();
 			con.close();
 		} catch (SQLException e) {
@@ -400,11 +403,6 @@ public class DataBase {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	public static void main(String[] args) 
-	{
-			System.out.println(GetSalt("asd"));
 	}
 	
 }
