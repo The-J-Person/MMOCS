@@ -427,5 +427,31 @@ public class DataBase {
 		}
 	}
 	
+	public static Tile GetTile (Coordinate cor)
+	{
+		try{
+			Tile T = new Tile(cor);
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Get_Tile(?,?,?,?)}");
+			prc.setLong(1, cor.X());
+			prc.setLong(2, cor.Y());
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.registerOutParameter(4, Types.INTEGER);
+			prc.execute();
+			int surface = prc.getInt(3);
+			int object = prc.getInt(4);
+			con.close();
+			T.setFloorType(FloorType.values()[surface]);
+			if(object == -1)
+				T.setMapObjectType(null);
+			else
+				T.setMapObjectType(MapObjectType.values()[object]);
+			return T;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
 
