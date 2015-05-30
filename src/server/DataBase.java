@@ -106,10 +106,9 @@ public class DataBase {
 		}
 	}
 	
-	public static SQLOutput AddMonster(Monster mnst)
+	public static int AddMonster(Monster mnst)
 	{
 		try{
-			SQLOutput flag = SQLOutput.EXISTS;
 			Connection con = get_connection();
 			CallableStatement prc = con.prepareCall("{call Add_Monster(?,?,?,?,?,?,?)}");
 			prc.setInt(1,mnst.getType());
@@ -121,17 +120,19 @@ public class DataBase {
 			prc.registerOutParameter(7, Types.INTEGER);
 			prc.execute();
 			int result = prc.getInt(7);
-			if(result == 0)
-				flag =  SQLOutput.EXISTS;
-			else if(result == 2)
-				flag = SQLOutput.NO;
+			if(result == -1)
+			{
+				con.close();
+				return -1;
+			}
 			else
-				flag = SQLOutput.OK;
-			con.close();
-			return flag;
+			{
+				con.close();
+				return result;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return SQLOutput.SQL_ERROR;
+			return -1;
 		}
 	}
 	
