@@ -135,16 +135,18 @@ public class DataBase {
 		}
 	}
 	
-	public static Monster GetMonster(int x, int y)
+	public static Monster GetMonster(Coordinate cor)
 	{
 		try{
+			long x = cor.X();
+			long y = cor.Y();
 			Connection con = get_connection();
 			CallableStatement prc = con.prepareCall("{call Get_Monster_By_Coordinate(?,?,?,?,?,?,?,?)}");
 			prc.registerOutParameter(1, Types.INTEGER);
 			prc.registerOutParameter(2, Types.INTEGER);
 			prc.registerOutParameter(3, Types.INTEGER);
-			prc.setInt(4,x);
-			prc.setInt(5,y);
+			prc.setLong(4,x);
+			prc.setLong(5,y);
 			prc.registerOutParameter(6, Types.INTEGER);
 			prc.registerOutParameter(7, Types.INTEGER);
 			prc.registerOutParameter(8, Types.INTEGER);
@@ -157,7 +159,7 @@ public class DataBase {
 			}
 			else
 			{
-				Monster mnst = new Monster(prc.getInt(1),prc.getInt(2),prc.getInt(3),x,y,prc.getInt(6),prc.getInt(7));
+				Monster mnst = new Monster(prc.getInt(1),prc.getInt(2),prc.getInt(3),(int)x,(int)y,prc.getInt(6),prc.getInt(7));
 				con.close();
 				return mnst;
 			}
