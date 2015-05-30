@@ -53,4 +53,5 @@ public enum Resource {
 				return null;
 		}
 	}
+	static final long serialVersionUID = 52013438;
 }
