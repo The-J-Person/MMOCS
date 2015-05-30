@@ -25,7 +25,7 @@ public class WorldMap {
 	 * Returns singleton instance
 	 * @return the instance
 	 */
-	public WorldMap getInstance()
+	public static WorldMap getInstance()
 	{
 		return wm;
 	}
