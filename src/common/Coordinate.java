@@ -74,4 +74,11 @@ public class Coordinate implements Serializable{
 	{
 		return (int)(( y << 16 ) ^ x); //According to the internet, this is the best way to hash two numbers
 	}
+	
+	public int distance(Coordinate other)
+	{
+		long d = Math.max(Math.abs(x-other.x),Math.abs(y-other.y));
+		if(Integer.MAX_VALUE<d) return Integer.MAX_VALUE;
+		return (int)d;
+	}
 }
