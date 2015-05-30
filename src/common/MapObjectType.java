@@ -40,4 +40,22 @@ public enum MapObjectType {
 		return (this == TREE || this == BUSH || this == ROCK);
 	}
 	
+	public Resource resource()
+	{
+		switch(this)
+		{
+		case TREE:
+			return Resource.WOOD;
+		case BUSH:
+			return Resource.BERRY;
+		case ROCK:
+			return Resource.STONE;
+		case WALL_WOOD:
+			return Resource.WOOD;
+		case WALL_STONE:
+			return Resource.STONE_BRICK;
+		default:
+			return null;
+		}
+	}
 }

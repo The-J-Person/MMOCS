@@ -30,6 +30,11 @@ public class Coordinate implements Serializable{
 		y=Y;
 	}
 	
+	public Coordinate(Coordinate other) {
+		x=other.X();
+		y=other.Y();
+	}
+
 	/**
 	 * Sets a coordinate 
 	 * @param X axis, and
@@ -64,4 +69,9 @@ public class Coordinate implements Serializable{
 		return true;
 	}
 		
+	@Override
+	public int hashCode()
+	{
+		return (int)(( y << 16 ) ^ x); //According to the internet, this is the best way to hash two numbers
+	}
 }
