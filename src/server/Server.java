@@ -64,6 +64,8 @@ public class Server extends Thread {
 
 				switch (to.getAction()) {
 				case "Login":
+					//TODO We need to save the user's ID and admin into the new thread
+					//The constructor for this is Player p = new Player(ID,is_admin).
 					if (common.Access.login(to.getUser(), to.getPass())) {
 						new Server(i, s);
 						i++;
