@@ -135,7 +135,7 @@ public class DataBase {
 		}
 	}
 	
-	public static Monster GetMonster(Coordinate cor)
+	public static Monster GetMonsterByCoordinate(Coordinate cor)
 	{
 		try{
 			long x = cor.X();
@@ -160,6 +160,38 @@ public class DataBase {
 			else
 			{
 				Monster mnst = new Monster(prc.getInt(1),prc.getInt(2),prc.getInt(3),(int)x,(int)y,prc.getInt(6),prc.getInt(7));
+				con.close();
+				return mnst;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Monster GetMonsterByID(int ID)
+	{
+		try{
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Get_Monster_By_ID(?,?,?,?,?,?,?,?)}");
+			prc.setInt(1,ID);
+			prc.registerOutParameter(2, Types.INTEGER);
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.registerOutParameter(4, Types.INTEGER);
+			prc.registerOutParameter(5, Types.INTEGER);
+			prc.registerOutParameter(6, Types.INTEGER);
+			prc.registerOutParameter(7, Types.INTEGER);
+			prc.registerOutParameter(8, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(8);
+			if(result == 0)
+			{
+				con.close();
+				return null;
+			}
+			else
+			{
+				Monster mnst = new Monster(ID,prc.getInt(2),prc.getInt(3),prc.getInt(4),prc.getInt(5),prc.getInt(6),prc.getInt(7));
 				con.close();
 				return mnst;
 			}
@@ -540,13 +572,36 @@ public class DataBase {
 		}
 	}
 	
+	public static SQLOutput MoveMonster(int ID, Coordinate coor)
+	{
+		try{
+			SQLOutput flag = SQLOutput.OK;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Move_Monster(?,?,?,?)}");
+			prc.setInt(1, ID);
+			prc.setLong(2, coor.X());
+			prc.setLong(3, coor.Y());
+			prc.registerOutParameter(4, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(4);
+			if(result == 0)
+				flag =  SQLOutput.NOT_FOUND;
+			con.close();
+			return flag;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return SQLOutput.SQL_ERROR;
+		}
+	}
+	
 	public static void main(String[] args)
 	{
-		Hashtable<Coordinate, Monster> Map = GetMonsters();
-		System.out.println(Map.get(new Coordinate(0,0)));
-		System.out.println(Map.get(new Coordinate(0,1)));
-		System.out.println(Map.get(new Coordinate(1,0)));
-		System.out.println(Map.get(new Coordinate(1,1)));
+		//Hashtable<Coordinate, Monster> Map = GetMonsters();
+		//System.out.println(Map.get(new Coordinate(0,0)));
+		//System.out.println(Map.get(new Coordinate(0,1)));
+		//System.out.println(Map.get(new Coordinate(1,0)));
+		//System.out.println(Map.get(new Coordinate(1,1)));
+		//System.out.println(MoveMonster(5,new Coordinate(4,4)));
 	}
 	
 }
