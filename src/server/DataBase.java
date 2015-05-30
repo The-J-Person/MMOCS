@@ -114,8 +114,8 @@ public class DataBase {
 			CallableStatement prc = con.prepareCall("{call Add_Monster(?,?,?,?,?,?,?)}");
 			prc.setInt(1,mnst.getType());
 			prc.setInt(2,mnst.getMaxHP());
-			prc.setInt(3,mnst.getX());
-			prc.setInt(4,mnst.getY());
+			prc.setInt(3,(int)mnst.getCoordinate().X());
+			prc.setInt(4,(int)mnst.getCoordinate().Y());
 			prc.setInt(5,mnst.getCurrentHP());
 			prc.setInt(6,mnst.getHunger());
 			prc.registerOutParameter(7, Types.INTEGER);
@@ -318,10 +318,9 @@ public class DataBase {
 		}
 	}
 	
-	public static SQLOutput LoginFun(String Username , String Password )
+	public static int LoginFun(String Username , String Password )
 	{
 		try{
-			SQLOutput flag = SQLOutput.OK;
 			Connection con = get_connection();
 			CallableStatement prc = con.prepareCall("{call Login(?,?,?)}");
 			prc.setString(1, Username);
@@ -330,16 +329,16 @@ public class DataBase {
 			prc.execute();
 			int result = prc.getInt(3);
 			if(result == 0)
-				flag =  SQLOutput.NOT_FOUND;
+				result = -1;
 			else if(result == 1)
-				flag = SQLOutput.NO;
+				result = -2;
 			else if(result == 2)
-				flag = SQLOutput.EXISTS;
+				result = -3;
 			con.close();
-			return flag;
+			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return SQLOutput.SQL_ERROR;
+			return -1;
 		}
 	}
 	
