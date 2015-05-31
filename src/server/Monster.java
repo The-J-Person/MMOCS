@@ -4,14 +4,15 @@ import common.*;
 
 public class Monster {
 	Coordinate c;
-	int Type,MaxHP,CurrentHP,Hunger;
+	int ID,Type,MaxHP,CurrentHP,Hunger;
 	
 	public String toString()
 	{
 		return Integer.toString(Type)+ " " + Integer.toString(MaxHP)+ " " + Integer.toString((int) c.X())+ " " + Integer.toString((int) c.Y())+ " " + Integer.toString(CurrentHP)+ " " + Integer.toString(Hunger);
 	}
-	public Monster(int Type,int MaxHP,int X,int Y,int CurrentHP,int Hunger)
+	public Monster(int ID, int Type,int MaxHP,int X,int Y,int CurrentHP,int Hunger)
 	{
+		this.ID = ID;
 		this.Type = Type;
 		this.MaxHP = MaxHP;
 		this.c = new Coordinate(X,Y);
@@ -23,6 +24,13 @@ public class Monster {
 	{
 		return this.Type;
 	}
+	
+	public int getID()
+	{
+		return this.ID;
+	}
+	
+	
 	
 	public int getMaxHP()
 	{
@@ -68,6 +76,5 @@ public class Monster {
 	{
 		this.Hunger = Hunger;
 	}
-	
 
 }
