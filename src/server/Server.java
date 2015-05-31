@@ -122,7 +122,11 @@ public class Server extends Thread {
 		this.s = s;
 
 		// starting new thread
+		
+		String name = "" + Access.id;
+		
 		setDaemon(true);
+		setName(name);
 		setPriority(NORM_PRIORITY);
 		start();
 	}
