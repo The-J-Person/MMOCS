@@ -15,7 +15,9 @@ public class Player implements MapObject {
 	public static final int distance=5;
 	public static final int BaseHealth=10; //Randomly picked
 	Coordinate C;
-	Hashtable<Resource,Integer> Inventory = new Hashtable<Resource,Integer>();
+	Hashtable<Resource,Integer> Inventory;
+	Stack<Update> updateLog;
+	
 	boolean admin;
 	int Health;
 	int MaxHealth;
@@ -30,6 +32,8 @@ public class Player implements MapObject {
 		Health=BaseHealth; 
 		Power=1;
 		C=DataBase.GetPlayerCoordinate(id);
+		Inventory = new Hashtable<Resource,Integer>();
+		updateLog = new Stack<Update>();
 		//TODO add inventory
 	}
 	
@@ -122,6 +126,15 @@ public class Player implements MapObject {
 		//TODO Check inventory
 		WorldMap.getInstance().update_tile(Ti);
 		return true;
+	}
+	
+	/**
+	 * True if there's a MapObject in the target Tile
+	 * @return
+	 */
+	public boolean object_in_tile(Coordinate co)
+	{
+		return WorldMap.getInstance().get_tile_at(co, false).getMapObjectType()!=null;
 	}
 	
 	/**
