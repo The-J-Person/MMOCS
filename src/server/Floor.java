@@ -27,14 +27,12 @@ public class Floor implements MapObject {
 
 	@Override
 	public int Health() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int Damage() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void Damage(int amount) {
+		//Do nothing
 	}
 
 }

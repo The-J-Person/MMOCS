@@ -12,7 +12,15 @@ import common.*;
 public class MapItem implements MapObject {
 	
 	Coordinate C;
+	MapObjectType type;
 	int Health;
+	
+	MapItem(Coordinate co, MapObjectType t)
+	{
+		C=co;
+		type=t;
+		Health=2*t.ordinal();
+	}
 	
 	/* (non-Javadoc)
 	 * @see server.MapObject#Coordinates()
@@ -28,8 +36,7 @@ public class MapItem implements MapObject {
 	 */
 	@Override
 	public common.Resource Resource() {
-		// TODO Auto-generated method stub
-		return null;
+		return type.resource();
 	}
 
 	/* (non-Javadoc)
@@ -37,14 +44,12 @@ public class MapItem implements MapObject {
 	 */
 	@Override
 	public int Health() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Health;
 	}
 
 	@Override
-	public int Damage() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void Damage(int amount) {
+		Health=Health-amount;
 	}
 
 }

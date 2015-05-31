@@ -10,5 +10,5 @@ public interface MapObject {
 	Coordinate Coordinates();
 	common.Resource Resource();
 	int Health();
-	int Damage();
+	void Damage(int amount);
 }

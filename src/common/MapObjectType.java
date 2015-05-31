@@ -8,8 +8,8 @@ package common;
 public enum MapObjectType {
 	PLAYER(0), //Identification of player's own self and other players.
 	MONSTER(1),
-	TREE(2),
-	BUSH(3),
+	BUSH(2),
+	TREE(3),
 	ROCK(4),
 	WALL_WOOD(5),
 	WALL_STONE(6);

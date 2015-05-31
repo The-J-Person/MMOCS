@@ -16,6 +16,7 @@ public class WorldMap {
 //	private List<Tile> map;
 //	private List<Coordinate> loaded;
 	private Hashtable<Coordinate, Tile> map; 
+	private Hashtable<Coordinate, MapObject> thingsOnMap;
 	
 	private WorldMap()
 	{
@@ -115,8 +116,55 @@ public class WorldMap {
 		return nt;
 	}
 	
+	/**
+	 * Updates or adds Tile, non-generated.
+	 * @param t
+	 */
 	public void update_tile(Tile t)
 	{
 		map.put(t.getCoordinate(), t);
+	}
+	
+	/**
+	 * 
+	 * @param co
+	 * @return
+	 */
+	public Resource get_resource(Coordinate co, int effi)
+	{
+		Tile req=map.get(co);
+		if(req.getMapObjectType()!=null && req.getMapObjectType().canHarvest())
+		{
+			MapItem mi=(MapItem) thingsOnMap.get(co);
+			if(mi==null)thingsOnMap.put(co,new MapItem(co,req.getMapObjectType()));
+			else if(mi.Health()<2) 
+				{
+					thingsOnMap.remove(co);
+					MapObjectType gotten=req.getMapObjectType();
+					req.setMapObjectType(null);
+					map.put(co, req);
+					return gotten.resource();
+				}
+			else mi.Damage(effi);
+		}
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param co
+	 * @return
+	 */
+	public Resource get_floor_resource(Coordinate co)
+	{
+		Tile req=map.get(co);
+		if(req.getFloorType()!=null)
+		{
+			FloorType gotten=req.getFloorType();
+			req.setFloorType(FloorType.DIRT);
+			map.put(co, req);
+			return gotten.resource();
+		}
+		return null;
 	}
 }

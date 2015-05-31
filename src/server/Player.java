@@ -20,6 +20,7 @@ public class Player implements MapObject {
 	int Health;
 	int MaxHealth;
 	int ID;
+	int Power;
 	
 	public Player(int id, boolean admn)
 	{
@@ -27,6 +28,7 @@ public class Player implements MapObject {
 		admin=admn;
 		MaxHealth=BaseHealth;
 		Health=BaseHealth; 
+		Power=1;
 		C=DataBase.GetPlayerCoordinate(id);
 		//TODO add inventory
 	}
@@ -91,9 +93,8 @@ public class Player implements MapObject {
 	}
 
 	@Override
-	public int Damage() {
-		// TODO Auto-generated method stub
-		return 1;
+	public void Damage(int amount) {
+		Health=Health-amount;
 	}
 	
 	public boolean isAdmin()
@@ -131,12 +132,24 @@ public class Player implements MapObject {
 	public boolean attack(Coordinate Co)
 	{
 		if(!admin && Co.distance(C)>distance) return false;
+		Resource r = WorldMap.getInstance().get_resource(Co,Power);
+		if(r!=null)
+		{
+			if(Inventory.get(r)!=null) Inventory.put(r,Inventory.get(r)+1);
+			else Inventory.put(r,1);
+		}
 		return true;
 	}
 	
 	public boolean gather_ground(Coordinate Co)
 	{
 		if(!admin && Co.distance(C)>distance) return false;
+		Resource r = WorldMap.getInstance().get_floor_resource(Co);
+		if(r!=null)
+		{
+			if(Inventory.get(r)!=null) Inventory.put(r,Inventory.get(r)+1);
+			else Inventory.put(r,1);
+		}
 		return true;
 	}
 }
