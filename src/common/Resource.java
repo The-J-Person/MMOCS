@@ -1,18 +1,30 @@
 package common;
 
 public enum Resource {
-	GRASS,
-	DIRT,
-	WATER,
-	MUD,
-	SAND,
-	STONE,
-	WOOD,
-	LEATHER,
-	STONE_BRICK,
-	DOOR,
-	BERRY,
-	MEAT;
+	GRASS(0),
+	DIRT(1),
+	WATER(2),
+	MUD(3),
+	SAND(4),
+	STONE(5),
+	WOOD(6),
+	LEATHER(7),
+	STONE_BRICK(8),
+	DOOR(9),
+	BERRY(10),
+	MEAT(11);
+	
+	private final int ID;
+	
+	private Resource(int ID)
+	{
+		this.ID = ID;
+	}
+	
+	public int getID()
+	{
+		return ID;
+	}
 	
 	public MapObjectType place_object()
 	{
