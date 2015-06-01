@@ -4,6 +4,7 @@
 package server;
 
 import common.*;
+
 import java.util.*;
 
 /**
@@ -94,6 +95,7 @@ public class Player implements MapObject {
 	public void setHealth(int nHealth)
 	{
 		Health=nHealth;
+		add_event_to_stack(new Update(UpdateType.HIT_POINTS,Health));
 	}
 	
 	public int view_distance()
@@ -104,6 +106,7 @@ public class Player implements MapObject {
 	@Override
 	public void Damage(int amount) {
 		Health=Health-amount;
+		add_event_to_stack(new Update(UpdateType.HIT_POINTS,Health));
 	}
 	
 	public boolean isAdmin()

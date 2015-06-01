@@ -151,8 +151,7 @@ public class WorldMap {
 					thingsOnMap.remove(co);
 					MapObjectType gotten=req.getMapObjectType();
 					req.setMapObjectType(null);
-					map.put(co, req);
-					DataBase.SetTile(req);
+					update_tile(req);
 					return gotten.resource();
 				}
 			else mi.Damage(effi);
@@ -172,8 +171,7 @@ public class WorldMap {
 		{
 			FloorType gotten=req.getFloorType();
 			req.setFloorType(FloorType.DIRT);
-			map.put(co, req);
-			DataBase.SetTile(req);
+			update_tile(req);
 			return gotten.resource();
 		}
 		return null;
