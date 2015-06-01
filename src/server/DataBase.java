@@ -3,6 +3,10 @@
  */
 package server;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
@@ -13,10 +17,50 @@ import common.*;
  *
  */
 public class DataBase {
-	
+	private static boolean need_to_check_file=true;
+	private static String schema;
+	private static String user;
+	private static String pass;
 	 private static String get_defaults()
      {
-         return "jdbc:mysql://localhost/test";
+		 if(need_to_check_file)
+		 {
+				String line;
+				try {
+					// FileReader reads text files in the default encoding.
+					FileReader fileReader = new FileReader("sql.txt");
+
+					// Always wrap FileReader in BufferedReader.
+					BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+					line = bufferedReader.readLine();
+					schema = new String(line);
+					
+					line = bufferedReader.readLine();
+					user = new String(line);
+
+					line = bufferedReader.readLine();
+					pass = new String(line);
+					// System.out.println(line);
+
+					// Always close files.
+					bufferedReader.close();
+				} catch (FileNotFoundException ex) {
+					System.out.println("Unable to open file 'sql.txt'");
+					schema="test";
+					user="root";
+					pass="1234";
+				} catch (IOException ex) {
+					System.out.println("Error reading file 'sql.txt'");
+					schema="test";
+					user="root";
+					pass="1234";
+					// Or we could just do this:
+					// ex.printStackTrace();
+				}
+				need_to_check_file=false;
+		 }
+         return "jdbc:mysql://localhost/"+schema;
      }
      
      public static Connection get_connection()
@@ -28,7 +72,7 @@ public class DataBase {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			Connection conn = DriverManager.getConnection(connection_string,"root","1234");
+			Connection conn = DriverManager.getConnection(connection_string,user,pass);
 			return conn;
 		} catch (SQLException e) {
 			e.printStackTrace();
