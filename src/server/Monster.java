@@ -1,8 +1,10 @@
 package server;
 
+import java.util.Random;
+
 import common.*;
 
-public class Monster {
+public class Monster implements MapObject{
 	Coordinate c;
 	int ID,Type,MaxHP,CurrentHP,Hunger;
 	
@@ -35,11 +37,6 @@ public class Monster {
 	public int getMaxHP()
 	{
 		return this.MaxHP;
-	}
-	
-	public Coordinate getCoordinate()
-	{
-		return c;
 	}
 	
 	public int getCurrentHP()
@@ -75,6 +72,27 @@ public class Monster {
 	public void setHunger(int Hunger)
 	{
 		this.Hunger = Hunger;
+	}
+	@Override
+	public Coordinate Coordinates() {
+		return c;
+	}
+	@Override
+	public common.Resource Resource() {
+		Random rnd = new Random();
+		int resource = rnd.nextInt(2);
+		if(resource == 1) return Resource.LEATHER;
+		return Resource.MEAT;
+	}
+	@Override
+	public int Health() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void Damage(int amount) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
