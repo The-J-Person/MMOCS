@@ -34,7 +34,7 @@ public class Player implements MapObject {
 		C=DataBase.GetPlayerCoordinate(id);
 		Inventory = new Hashtable<Resource,Integer>();
 		updateLog = new Stack<Update>();
-		WorldMap.getInstance().
+		WorldMap.getInstance();
 		//TODO add inventory
 	}
 	
