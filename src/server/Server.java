@@ -48,7 +48,7 @@ public class Server extends Thread {
 			// ServerSocket servers = new ServerSocket(8080, 0,
 			// InetAddress.getByName("localhost"));
 
-			// System.out.println("Server is started");
+			 System.out.println("Server is started");
 			// // listing for port.
 			// // waiting for new connection , after it running the client in
 			// // new socket connection
