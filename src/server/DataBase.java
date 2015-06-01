@@ -272,33 +272,31 @@ public class DataBase {
 		}
 	}
 	
-	public static List<Equipment> GetEquipment(int UID)
+	public static Hashtable<Resource, Integer> GetInventory(int UID)
 	{
-		List<Equipment> Eqp = null;
 		try{
+			Hashtable<Resource, Integer> inv = null;
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Get_Equipment_Of_Player(?,?)}");
+			CallableStatement prc = con.prepareCall("{call Get_Inventory(?,?)}");
 			prc.setInt(1,UID);
 			prc.registerOutParameter(2, Types.INTEGER);
 			prc.execute();
 			int Result = prc.getInt(2);
 			ResultSet Res = prc.getResultSet();
-			if(Result == 0)
-				return Eqp;
-			else
+			if(Result != 0)
+			{
+				inv = new Hashtable<Resource, Integer>();
+				while(Res.next())
 				{
-				Eqp = new ArrayList<Equipment>();
-					while(Res.next())
-					{
-						Eqp.add(new Equipment(Res.getInt(1),Res.getString(2),Res.getString(3)));
-					}
-					Res.close();
+					inv.put(Resource.values()[Res.getInt(1)],Res.getInt(2));
 				}
+			}
+			Res.close();
 			con.close();
-			return Eqp;
+			return inv;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return Eqp;
+			return null;
 		}
 	}
 	
