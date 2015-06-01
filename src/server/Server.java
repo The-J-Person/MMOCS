@@ -4,7 +4,8 @@ import common.*;
 
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
+import java.util.Random;
+//import java.util.Scanner;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -27,25 +28,33 @@ public class Server extends Thread {
 	private static String s_pwd; // Sender password for email sending
 	private static String s_host;// Sender host for email sending
 	private static final String data_file = "email.txt";
+
 	// private ServerSocket servers;
 	// private BufferedReader input;
 	// private PrintStream output;
-	private Scanner scan = new Scanner(System.in);
+	// private Scanner scan = new Scanner(System.in);
 
 	public static void main(String[] args) {
 		get_sender_email();
+
 		try {
+
 			int i = 0; // counter for connected clients.
+			String Salt, Auth_Code, Password;
+			String[] Info;
 
 			// Connect socket to localhost , port 8080
 			ServerSocket m_ServerSocket = new ServerSocket(8080);
-			//ServerSocket servers = new ServerSocket(8080, 0,
-				//	InetAddress.getByName("localhost"));
+			// ServerSocket servers = new ServerSocket(8080, 0,
+			// InetAddress.getByName("localhost"));
 
-			System.out.println("Server is started");
+			// System.out.println("Server is started");
+			// // listing for port.
+			// // waiting for new connection , after it running the client in
+			// // new socket connection
+			// // we increase i by 1
 
-			while(true)
-			{
+			while (true) {
 				Socket s = m_ServerSocket.accept();
 				ObjectInputStream lois = new ObjectInputStream(
 						s.getInputStream());
@@ -53,62 +62,67 @@ public class Server extends Thread {
 				ObjectOutputStream loos = new ObjectOutputStream(
 						s.getOutputStream());
 
-				Access to = null;
-				
+				Request to = null;
+
 				try {
-					to = (Access) lois.readObject();
+					to = (Request) lois.readObject();
 				} catch (ClassNotFoundException e) {
 					System.out.println("broke");
 					e.printStackTrace();
 				}
 
-				switch (to.getAction()) {
+				Info = (String[]) to.getData(); // insert all received data from
+												// "lois" to Info
+
+				switch (to.getType()) {
 				case LOG_IN:
-					//TODO We need to save the user's ID and admin into the new thread
-					//The constructor for this is Player p = new Player(ID,is_admin).
-					if (server.Access.login(to.getUser(), to.getPass())) {
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true,RequestType.LOG_IN)));
-						Player player = server.DataBase.GetPlayerByID(Access.id);
-						loos.writeObject(player.Coordinates());
-						loos.writeObject(player.Health());
-						//TODO must add Inventory param !!!
-						
-						
+
+					Salt = DataBase.GetSalt(Info[1]);
+					Password = Cryptography.encrypt(Info[1], Salt);
+					if (server.Access.login(Info[0], Password)) {
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
+								new Acknowledgement(true, RequestType.LOG_IN)));
 						new Server(i, s);
 						i++;
 					}
 					break;
 				case REGISTER:
-					if(server.Access.newUser(to.getUser(), to.getPass(), to.getEmail()) == 0){
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.REGISTER)));
-						s.close(); 
-					}else{loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.REGISTER)));
-					s.close(); 
+
+					Salt = randomString();
+					Auth_Code = randomString();
+					Password = Cryptography.encrypt(Info[1], Salt);
+
+					if (server.Access.newUser(Info[0], Password, Salt, Info[2],
+							Auth_Code) == 0) {
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
+								new Acknowledgement(true, RequestType.REGISTER)));
+						SendMail(Info[0], Info[2], Auth_Code);
+						s.close();
+					} else {
+						loos.writeObject(new Update(
+								UpdateType.ACKNOWLEDGMENT,
+								new Acknowledgement(false, RequestType.REGISTER)));
+						s.close();
 					}
 					break;
 
 				case CONFIRM:
-					if(server.Access.confirm(to.getUser(),to.getCode())){
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.CONFIRM)));
-						s.close();	//need return message !!!
-					}else{
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.CONFIRM)));
-						s.close();	//need return message !!!
+					if (server.Access.confirm(Info[0], Info[1])) {
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
+								new Acknowledgement(true, RequestType.CONFIRM)));
+						s.close(); // need return message !!!
+					} else {
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
+								new Acknowledgement(false, RequestType.CONFIRM)));
+						s.close(); // need return message !!!
 					}
 					break;
 
 				default:
+					s.close();
 					break;
 				}
 			}
-
-//			// listing for port.
-//			while (true) {
-//				// waiting for new connection , after it running the client in
-//				// new socket connection
-//				// we increase i by 1
-//
-//			}
 
 		} catch (Exception e) {
 			System.out.println("Init error: " + e);
@@ -120,11 +134,8 @@ public class Server extends Thread {
 		// copy parameters
 		this.num = num;
 		this.s = s;
-
 		// starting new thread
-		
 		String name = "" + Access.id;
-		
 		setDaemon(true);
 		setName(name);
 		setPriority(NORM_PRIORITY);
@@ -133,83 +144,144 @@ public class Server extends Thread {
 
 	public void run() {
 		try {
-			
+
 			Coordinate co;
-			Player pl = server.DataBase.GetPlayerByID(Access.id);
-			
-		
+			Player pl = server.DataBase.GetPlayerByID(Integer.parseInt(this
+					.getName()));
+
+			ObjectOutputStream oos1 = new ObjectOutputStream(
+					s.getOutputStream());// getting data from server
+											// to client
+
+			oos1.writeObject(pl.Coordinates());
+			oos1.writeObject(pl.Health());
+
 			while (s.isConnected()) {
-				
+
 				ObjectInputStream ois = new ObjectInputStream(
 						s.getInputStream());// getting data from client
 											// socket
 
 				ObjectOutputStream oos = new ObjectOutputStream(
 						s.getOutputStream());// getting data from server
-											// to client
+												// to client
 				Request re = null;
 				Update up = null;
-				
-				re = (Request)ois.readObject();
-				
-				//Update up = (Update)oos.writeObject(obj);
+
+				re = (Request) ois.readObject();
+
+				// Update up = (Update)oos.writeObject(obj);
 				try {
 					switch (re.getType()) {
 					case ATTACK:
-						
-						//TODO here must be an function
+						co = (Coordinate) re.getData();
+						if (pl.object_in_tile(co)) {
+
+						} else {
+
+						}
+
+						// TODO here must be an function
 						break;
 					case CRAFT:
-						
-						//TODO here must be an function
+
+						// TODO here must be an function
 						break;
 					case HARVEST:
-						
-						//TODO here must be an function
+						co = (Coordinate) re.getData();
+						if (pl.object_in_tile(co)) {
+							if (pl.attack(co)) {
+								oos.writeObject(new Update(
+										UpdateType.ACKNOWLEDGMENT,
+										new Acknowledgement(true,
+												RequestType.HARVEST)));
+								// 2.......must return update
+
+							} else {
+								oos.writeObject(new Update(
+										UpdateType.ACKNOWLEDGMENT,
+										new Acknowledgement(false,
+												RequestType.HARVEST)));
+							}
+
+						} else {
+							if (pl.gather_ground(co)) {
+								oos.writeObject(new Update(
+										UpdateType.ACKNOWLEDGMENT,
+										new Acknowledgement(true,
+												RequestType.HARVEST)));
+								// must return update
+
+							} else {
+								oos.writeObject(new Update(
+										UpdateType.ACKNOWLEDGMENT,
+										new Acknowledgement(false,
+												RequestType.HARVEST)));
+							}
+						}
 						break;
+
 					case LOG_OUT:
-						oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.LOG_OUT)));
-						s.close();	//need return message !!!
-						if(s.isConnected()){
-							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.LOG_OUT)));
+						oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
+								new Acknowledgement(true, RequestType.LOG_OUT)));
+						s.close(); // need return message !!!
+						if (s.isConnected()) {
+							oos.writeObject(new Update(
+									UpdateType.ACKNOWLEDGMENT,
+									new Acknowledgement(false,
+											RequestType.LOG_OUT)));
 						}
-							
 						break;
+
 					case MOVE:
-						co = (Coordinate)re.getData();
-						if ( pl.Move(co) ){
-							up = new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.MOVE));
+						co = (Coordinate) re.getData();
+						if (pl.Move(co)) {
+							up = new Update(UpdateType.ACKNOWLEDGMENT,
+									new Acknowledgement(true, RequestType.MOVE));
 							oos.writeObject(up);
-						}else{
-							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.MOVE)));
+						} else {
+							oos.writeObject(new Update(
+									UpdateType.ACKNOWLEDGMENT,
+									new Acknowledgement(false, RequestType.MOVE)));
 						}
 						break;
+
 					case TILE:
-						co = (Coordinate)re.getData();
-						if(pl.see_Tile(co)){
-							
-						Tile toClient = WorldMap.getInstance().get_tile_at(co,true);
-						up = new Update(UpdateType.TILE, toClient );
-						oos.writeObject(up);
-						}else{
-							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.TILE)));
+						co = (Coordinate) re.getData();
+						if (pl.see_Tile(co)) {
+
+							Tile toClient = WorldMap.getInstance().get_tile_at(
+									co, true);
+							up = new Update(UpdateType.TILE, toClient);
+							oos.writeObject(up);
+						} else {
+							oos.writeObject(new Update(
+									UpdateType.ACKNOWLEDGMENT,
+									new Acknowledgement(false, RequestType.TILE)));
 						}
 						break;
+
 					case UPDATE_TILE:
-						co = (Coordinate)re.getData();
-						Tile toChange = WorldMap.getInstance().get_tile_at(co,true);
-						if(pl.change_Tile(toChange)){
-							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(true, RequestType.UPDATE_TILE)));
-						}else{
-							oos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.UPDATE_TILE)));
+						co = (Coordinate) re.getData();
+						Tile toChange = WorldMap.getInstance().get_tile_at(co,
+								true);
+						if (pl.change_Tile(toChange)) {
+							oos.writeObject(new Update(
+									UpdateType.ACKNOWLEDGMENT,
+									new Acknowledgement(true,
+											RequestType.UPDATE_TILE)));
+						} else {
+							oos.writeObject(new Update(
+									UpdateType.ACKNOWLEDGMENT,
+									new Acknowledgement(false,
+											RequestType.UPDATE_TILE)));
 						}
-						
 						break;
 
 					default:
 						break;
 					}
-					
+
 				} catch (Exception e) {
 					System.out.print(e.getMessage());
 				}
@@ -260,8 +332,7 @@ public class Server extends Thread {
 	 * @param Salt
 	 * @param Auth_Code
 	 */
-	public static void Register(String username, String email, String password,
-			String Salt, String Auth_Code) {
+	public static void SendMail(String username, String email, String Auth_Code) {
 		Properties props = new Properties();
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.auth", "true");
@@ -295,5 +366,15 @@ public class Server extends Thread {
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static String randomString() {
+		Random r = new Random();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 6; i++) {
+			char c = (char) (r.nextInt((int) (Character.MAX_VALUE)));
+			sb.append(c);
+		}
+		return sb.toString();
 	}
 }
