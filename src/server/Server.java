@@ -48,7 +48,7 @@ public class Server extends Thread {
 			// ServerSocket servers = new ServerSocket(8080, 0,
 			// InetAddress.getByName("localhost"));
 
-			 System.out.println("Server is started");
+			System.out.println("Server is started");
 			// // listing for port.
 			// // waiting for new connection , after it running the client in
 			// // new socket connection
@@ -61,7 +61,6 @@ public class Server extends Thread {
 
 				ObjectOutputStream loos = new ObjectOutputStream(
 						s.getOutputStream());
-				
 
 				Request to = null;
 
@@ -81,7 +80,7 @@ public class Server extends Thread {
 					Salt = DataBase.GetSalt(Info[1]);
 					Password = Cryptography.encrypt(Info[1], Salt);
 					if (server.Access.login(Info[0], Password)) {
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGEMENT,
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.LOG_IN)));
 						new Server(i, s);
 						i++;
@@ -95,13 +94,13 @@ public class Server extends Thread {
 
 					if (server.Access.newUser(Info[0], Password, Salt, Info[2],
 							Auth_Code) == 0) {
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGEMENT,
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.REGISTER)));
 						SendMail(Info[0], Info[2], Auth_Code);
 						s.close();
 					} else {
 						loos.writeObject(new Update(
-								UpdateType.ACKNOWLEDGEMENT,
+								UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(false, RequestType.REGISTER)));
 						s.close();
 					}
@@ -109,11 +108,11 @@ public class Server extends Thread {
 
 				case CONFIRM:
 					if (server.Access.confirm(Info[0], Info[1])) {
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGEMENT,
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.CONFIRM)));
 						s.close(); // need return message !!!
 					} else {
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGEMENT,
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(false, RequestType.CONFIRM)));
 						s.close(); // need return message !!!
 					}
@@ -234,7 +233,7 @@ public class Server extends Thread {
 							s.close(); // need return message !!!
 							if (s.isConnected()) {
 								oos.writeObject(new Update(
-										UpdateType.ACKNOWLEDGEMENT,
+										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.LOG_OUT)));
 							}
@@ -265,7 +264,7 @@ public class Server extends Thread {
 								oos.writeObject(up);
 							} else {
 								oos.writeObject(new Update(
-										UpdateType.ACKNOWLEDGEMENT,
+										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.TILE)));
 							}
@@ -277,75 +276,23 @@ public class Server extends Thread {
 									co, true);
 							if (pl.change_Tile(toChange)) {
 								oos.writeObject(new Update(
-										UpdateType.ACKNOWLEDGEMENT,
+										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(true,
 												RequestType.UPDATE_TILE)));
 							} else {
 								oos.writeObject(new Update(
-										UpdateType.ACKNOWLEDGEMENT,
+										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.UPDATE_TILE)));
 							}
 							break;
 
-					case LOG_OUT:
-						oos.writeObject(new Update(UpdateType.ACKNOWLEDGEMENT,
-								new Acknowledgement(true, RequestType.LOG_OUT)));
-						s.close(); // need return message !!!
-						if (s.isConnected()) {
-							oos.writeObject(new Update(
-									UpdateType.ACKNOWLEDGEMENT,
-									new Acknowledgement(false,
-											RequestType.LOG_OUT)));
+						default:
+							break;
 						}
 
-					case MOVE:
-						co = (Coordinate) re.getData();
-						if (pl.Move(co)) {
-							up = new Update(UpdateType.ACKNOWLEDGEMENT,
-									new Acknowledgement(true, RequestType.MOVE));
-							oos.writeObject(up);
-						} else {
-							oos.writeObject(new Update(
-									UpdateType.ACKNOWLEDGEMENT,
-									new Acknowledgement(false, RequestType.MOVE)));
-						}
-						break;
-
-					case TILE:
-						co = (Coordinate) re.getData();
-						if (pl.see_Tile(co)) {
-
-							Tile toClient = WorldMap.getInstance().get_tile_at(
-									co, true);
-							up = new Update(UpdateType.TILE, toClient);
-							oos.writeObject(up);
-						} else {
-							oos.writeObject(new Update(
-									UpdateType.ACKNOWLEDGEMENT,
-									new Acknowledgement(false, RequestType.TILE)));
-						}
-						break;
-
-					case UPDATE_TILE:
-						co = (Coordinate) re.getData();
-						Tile toChange = WorldMap.getInstance().get_tile_at(co,
-								true);
-						if (pl.change_Tile(toChange)) {
-							oos.writeObject(new Update(
-									UpdateType.ACKNOWLEDGEMENT,
-									new Acknowledgement(true,
-											RequestType.UPDATE_TILE)));
-						} else {
-							oos.writeObject(new Update(
-									UpdateType.ACKNOWLEDGEMENT,
-									new Acknowledgement(false,
-											RequestType.UPDATE_TILE)));
-						}
-						break;
-
-					default:
-						break;
+					} catch (Exception e) {
+						System.out.print(e.getMessage());
 					}
 
 				}// end if
