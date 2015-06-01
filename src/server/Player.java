@@ -158,6 +158,7 @@ public class Player implements MapObject {
 		{
 			if(Inventory.get(r)!=null) Inventory.put(r,Inventory.get(r)+1);
 			else Inventory.put(r,1);
+			add_event_to_stack(new Update(UpdateType.RESOURCES,r));
 		}
 		return true;
 	}
@@ -175,6 +176,7 @@ public class Player implements MapObject {
 		{
 			if(Inventory.get(r)!=null) Inventory.put(r,Inventory.get(r)+1);
 			else Inventory.put(r,1);
+			add_event_to_stack(new Update(UpdateType.RESOURCES,r));
 		}
 		return true;
 	}
