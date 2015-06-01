@@ -61,6 +61,7 @@ public class Server extends Thread {
 
 				ObjectOutputStream loos = new ObjectOutputStream(
 						s.getOutputStream());
+				
 
 				Request to = null;
 
@@ -165,6 +166,10 @@ public class Server extends Thread {
 				ObjectOutputStream oos = new ObjectOutputStream(
 						s.getOutputStream());// getting data from server
 												// to client
+				int check =  s.getInputStream().available();
+				
+				if(check > 0){
+				
 				Request re = null;
 				Update up = null;
 
@@ -284,6 +289,19 @@ public class Server extends Thread {
 
 				} catch (Exception e) {
 					System.out.print(e.getMessage());
+				}
+				
+			}// end if
+				//if user Deactivation , we will check events 
+				else{
+					Update newUP = pl.getEvents();
+					if(pl.getEvents() == null)
+						continue;
+					else
+					{
+						oos.writeObject(newUP);
+					}
+					
 				}
 			}
 
