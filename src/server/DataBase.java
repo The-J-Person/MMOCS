@@ -552,10 +552,10 @@ public class DataBase {
 		}
 	}
 	
-	public static Hashtable<Coordinate, Monster> GetMonsters()
+	public static Hashtable<Coordinate, MapObject> GetMonsters()
 	{
 		try{
-			Hashtable<Coordinate, Monster> monst = new Hashtable<Coordinate, Monster>();
+			Hashtable<Coordinate, MapObject> monst = new Hashtable<Coordinate, MapObject>();
 			Connection con = get_connection();
 			CallableStatement prc = con.prepareCall("{call Get_Monsters()}");
 			prc.execute();
