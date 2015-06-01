@@ -126,6 +126,12 @@ public class WorldMap {
 	public void update_tile(Tile t)
 	{
 		map.put(t.getCoordinate(), t);
+		DataBase.SetTile(t); // Maybe ignore monsters and players?
+		for(int i=0;i<players.size();i++)
+		{
+			if(players.get(i).see_Tile(t.getCoordinate())) 
+				players.get(i).add_event_to_stack(new Update(UpdateType.TILE,t));
+		}
 	}
 	
 	/**
@@ -175,14 +181,19 @@ public class WorldMap {
 	
 	public void login(Player P)
 	{
-		thingsOnMap.put(P.Coordinates(), P);
-		
+		//thingsOnMap.put(P.Coordinates(), P);
+		Tile PT = get_tile_at(P.Coordinates(),false);
+		PT.setMapObjectType(MapObjectType.PLAYER);
+		update_tile(PT);
 		players.add(P);
 	}
 	
 	public void logout(Player P)
 	{
-		thingsOnMap.remove(P.Coordinates());
+		//thingsOnMap.remove(P.Coordinates());
+		Tile PT = get_tile_at(P.Coordinates(),false);
+		PT.setMapObjectType(null);
 		players.remove(P);
+		update_tile(PT);
 	}
 }

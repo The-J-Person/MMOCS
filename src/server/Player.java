@@ -34,7 +34,7 @@ public class Player implements MapObject {
 		C=DataBase.GetPlayerCoordinate(id);
 		Inventory = new Hashtable<Resource,Integer>();
 		updateLog = new Stack<Update>();
-		WorldMap.getInstance();
+		if(!admin)WorldMap.getInstance().login(this);
 		//TODO add inventory
 	}
 	
@@ -59,12 +59,16 @@ public class Player implements MapObject {
 			C = co;
 			return true;
 		}
-		Tile dest = WorldMap.getInstance().get_tile_at(co, true);
+		Tile dest = WorldMap.getInstance().get_tile_at(co, false);
 		if(dest.canMoveOn())
 		{
+			Tile orig=WorldMap.getInstance().get_tile_at(C, false);
+			orig.setMapObjectType(null);
 			C = co;
 			dest.setMapObjectType(MapObjectType.PLAYER);
 			WorldMap.getInstance().update_tile(dest);
+			WorldMap.getInstance().update_tile(orig);
+			DataBase.UpdatePlayerLocation(ID, C);
 			return true;
 		}
 		return false;
@@ -177,7 +181,7 @@ public class Player implements MapObject {
 	 */
 	public void logout()
 	{
-		WorldMap.getInstance().logout(this);
+		if(!admin)WorldMap.getInstance().logout(this);
 	}
 	
 	/**
