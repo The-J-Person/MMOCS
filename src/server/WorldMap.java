@@ -17,10 +17,13 @@ public class WorldMap {
 //	private List<Coordinate> loaded;
 	private Hashtable<Coordinate, Tile> map; 
 	private Hashtable<Coordinate, MapObject> thingsOnMap;
+	private List<Player> players;
 	
 	private WorldMap()
 	{
-		//TODO: Do we need a ctor?
+		map=DataBase.GetMap();
+		thingsOnMap=DataBase.GetMonsters();
+		players=new ArrayList<Player>();
 	}
 	
 	/**
@@ -77,7 +80,7 @@ public class WorldMap {
 				Tile generated = generate_tile(c,neighbors);
 				/* Update DB */
 				map.put(c,generated);
-				//TODO update DB
+				DataBase.SetTile(req);
 				/* Return generated Tile */
 				return generated;
 			}
@@ -143,6 +146,7 @@ public class WorldMap {
 					MapObjectType gotten=req.getMapObjectType();
 					req.setMapObjectType(null);
 					map.put(co, req);
+					DataBase.SetTile(req);
 					return gotten.resource();
 				}
 			else mi.Damage(effi);
@@ -163,8 +167,22 @@ public class WorldMap {
 			FloorType gotten=req.getFloorType();
 			req.setFloorType(FloorType.DIRT);
 			map.put(co, req);
+			DataBase.SetTile(req);
 			return gotten.resource();
 		}
 		return null;
+	}
+	
+	public void login(Player P)
+	{
+		thingsOnMap.put(P.Coordinates(), P);
+		
+		players.add(P);
+	}
+	
+	public void logout(Player P)
+	{
+		thingsOnMap.remove(P.Coordinates());
+		players.remove(P);
 	}
 }

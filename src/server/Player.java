@@ -34,6 +34,7 @@ public class Player implements MapObject {
 		C=DataBase.GetPlayerCoordinate(id);
 		Inventory = new Hashtable<Resource,Integer>();
 		updateLog = new Stack<Update>();
+		WorldMap.getInstance().
 		//TODO add inventory
 	}
 	
@@ -95,7 +96,7 @@ public class Player implements MapObject {
 	{
 		return distance;
 	}
-
+	
 	@Override
 	public void Damage(int amount) {
 		Health=Health-amount;
@@ -154,6 +155,11 @@ public class Player implements MapObject {
 		return true;
 	}
 	
+	/**
+	 * Attempts to gather ground
+	 * @param Co
+	 * @return
+	 */
 	public boolean gather_ground(Coordinate Co)
 	{
 		if(!admin && Co.distance(C)>distance) return false;
@@ -164,5 +170,39 @@ public class Player implements MapObject {
 			else Inventory.put(r,1);
 		}
 		return true;
+	}
+	
+	/**
+	 * Removes the player from the map
+	 */
+	public void logout()
+	{
+		WorldMap.getInstance().logout(this);
+	}
+	
+	/**
+	 * Used by WorldMap to let player know something near them happened.
+	 * @param Up
+	 */
+	public void add_event_to_stack(Update Up)
+	{
+		updateLog.push(Up);
+	}
+	
+	/**
+	 * Returns ONE event if there are any in stack.
+	 * If the stack is empty, null is returned.
+	 * @return an Update object event, if any.
+	 */
+	public Update getEvents()
+	{
+		try
+		{
+			return updateLog.pop();
+		}
+		catch (EmptyStackException e)
+		{
+			return null;
+		}
 	}
 }
