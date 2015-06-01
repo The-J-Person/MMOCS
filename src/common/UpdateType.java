@@ -2,7 +2,7 @@ package common;
 
 public enum UpdateType {
 	TILE,
-	ACKNOWLEDGMENT,
+	ACKNOWLEDGEMENT,
 	HIT_POINTS,
 	RESOURCES,
 	INVENTORY,
