@@ -477,7 +477,7 @@ public class DataBase {
 			int object = prc.getInt(4);
 			con.close();
 			T.setFloorType(FloorType.values()[surface]);
-			if(object == -1)
+			if(object == -1 || object == 0 || object == 1)
 				T.setMapObjectType(null);
 			else
 				T.setMapObjectType(MapObjectType.values()[object]);
