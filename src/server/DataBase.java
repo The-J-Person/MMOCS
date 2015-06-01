@@ -113,8 +113,8 @@ public class DataBase {
 			CallableStatement prc = con.prepareCall("{call Add_Monster(?,?,?,?,?,?,?)}");
 			prc.setInt(1,mnst.getType());
 			prc.setInt(2,mnst.getMaxHP());
-			prc.setInt(3,(int)mnst.getCoordinate().X());
-			prc.setInt(4,(int)mnst.getCoordinate().Y());
+			prc.setInt(3,(int)mnst.Coordinates().X());
+			prc.setInt(4,(int)mnst.Coordinates().Y());
 			prc.setInt(5,mnst.getCurrentHP());
 			prc.setInt(6,mnst.getHunger());
 			prc.registerOutParameter(7, Types.INTEGER);
@@ -562,7 +562,7 @@ public class DataBase {
 			ResultSet Res = prc.getResultSet();
 			while(Res.next())
 			{
-				monst.put(new Coordinate(Res.getInt(4) ,Res.getInt(5)), new Monster(Res.getInt(1),Res.getInt(2),Res.getInt(3),Res.getInt(4),Res.getInt(5),Res.getInt(6),Res.getInt(7)));
+				monst.put(new Coordinate(Res.getInt(4) ,Res.getInt(5)), (MapObject) new Monster(Res.getInt(1),Res.getInt(2),Res.getInt(3),Res.getInt(4),Res.getInt(5),Res.getInt(6),Res.getInt(7)));
 			}
 			Res.close();
 			con.close();
@@ -593,16 +593,6 @@ public class DataBase {
 			e.printStackTrace();
 			return SQLOutput.SQL_ERROR;
 		}
-	}
-	
-	public static void main(String[] args)
-	{
-		//Hashtable<Coordinate, Monster> Map = GetMonsters();
-		//System.out.println(Map.get(new Coordinate(0,0)));
-		//System.out.println(Map.get(new Coordinate(0,1)));
-		//System.out.println(Map.get(new Coordinate(1,0)));
-		//System.out.println(Map.get(new Coordinate(1,1)));
-		//System.out.println(MoveMonster(5,new Coordinate(4,4)));
 	}
 	
 }
