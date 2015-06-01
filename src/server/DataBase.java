@@ -658,5 +658,31 @@ public class DataBase {
 		}
 	}
 	
+	public static SQLOutput RemoveItemFromInventory(int ID, Resource res, int Amount)
+	{
+		try{
+			SQLOutput flag = SQLOutput.OK;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Remove_Item_From_Inventory(?,?,?,?)}");
+			prc.setInt(1, ID);
+			prc.setInt(2, res.getID());
+			prc.setInt(3, Amount);
+			prc.registerOutParameter(4, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(4);
+			if(result == 0)
+				flag =  SQLOutput.NOT_FOUND;
+			else if(result == 1)
+				flag = SQLOutput.NO;
+			else if(result == 2)
+				flag = SQLOutput.EXISTS;
+			con.close();
+			return flag;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return SQLOutput.SQL_ERROR;
+		}
+	}
+	
 }
 
