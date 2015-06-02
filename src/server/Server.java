@@ -76,21 +76,25 @@ public class Server extends Thread {
 
 				switch (to.getType()) {
 				case LOG_IN:
-					System.out.println("Log in attempt acquired. Confirming...\n");
+					System.out
+							.println("Log in attempt acquired. Confirming...\n");
 					Salt = DataBase.GetSalt(Info[1]);
 					Password = Cryptography.encrypt(Info[1], Salt);
 					if (server.Access.login(Info[0], Password)) {
-						System.out.println("Login successful for user " + Info[0] + "...\n");
+						System.out.println("Login successful for user "
+								+ Info[0] + "...\n");
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.LOG_IN)));
 						new Server(i, s);
 						i++;
-					}
-					else System.out.println("Login successful for " + Info[0] + "!\n");
+					} else
+						System.out.println("Login successful for " + Info[0]
+								+ "!\n");
 					break;
 				case REGISTER:
-					System.out.println("Registration attempt acquired. Validating...\n");
-					//Salt = randomString();
+					System.out
+							.println("Registration attempt acquired. Validating...\n");
+					// Salt = randomString();
 					Salt = AuthCode.generatKey();
 					Auth_Code = AuthCode.generatKey();
 					Password = Cryptography.encrypt(Info[1], Salt);
@@ -112,14 +116,16 @@ public class Server extends Thread {
 					break;
 
 				case CONFIRM:
-					System.out.println("Confirmation attempt acquired. Checking...\n");
+					System.out
+							.println("Confirmation attempt acquired. Checking...\n");
 					if (server.Access.confirm(Info[0], Info[1])) {
-						System.out.println("Validated "+ Info[0] +"...\n");
+						System.out.println("Validated " + Info[0] + "...\n");
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.CONFIRM)));
 						s.close(); // need return message !!!
 					} else {
-						System.out.println("Failed to validate "+ Info[0] +"...\n");
+						System.out.println("Failed to validate " + Info[0]
+								+ "...\n");
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(false, RequestType.CONFIRM)));
 						s.close(); // need return message !!!
@@ -127,7 +133,8 @@ public class Server extends Thread {
 					break;
 
 				default:
-					System.out.println("Received invalid request, ignoring...\n");
+					System.out
+							.println("Received invalid request, ignoring...\n");
 					s.close();
 					break;
 				}
@@ -143,7 +150,8 @@ public class Server extends Thread {
 		// copy parameters
 		this.num = num;
 		this.s = s;
-		System.out.println("Starting a new player thread for player ID "+ Access.id);
+		System.out.println("Starting a new player thread for player ID "
+				+ Access.id);
 		// starting new thread
 		String name = "" + Access.id;
 		setDaemon(true);
@@ -189,9 +197,19 @@ public class Server extends Thread {
 						switch (re.getType()) {
 						case ATTACK:
 							co = (Coordinate) re.getData();
-							if (pl.object_in_tile(co)) {
+							if (pl.attack(co)) {
+								oos.writeObject(new Update(
+										UpdateType.ACKNOWLEDGMENT,
+										new Acknowledgement(true,
+												RequestType.ATTACK)));
+								up = pl.getEvents();
+								oos.writeObject(up);
 
 							} else {
+								oos.writeObject(new Update(
+										UpdateType.ACKNOWLEDGMENT,
+										new Acknowledgement(false,
+												RequestType.ATTACK)));
 
 							}
 
@@ -209,7 +227,8 @@ public class Server extends Thread {
 											UpdateType.ACKNOWLEDGMENT,
 											new Acknowledgement(true,
 													RequestType.HARVEST)));
-									// 2.......must return update
+									up = pl.getEvents();
+									oos.writeObject(up);
 
 								} else {
 									oos.writeObject(new Update(
@@ -224,7 +243,8 @@ public class Server extends Thread {
 											UpdateType.ACKNOWLEDGMENT,
 											new Acknowledgement(true,
 													RequestType.HARVEST)));
-									// must return update
+									up = pl.getEvents();
+									oos.writeObject(up);
 
 								} else {
 									oos.writeObject(new Update(
@@ -399,13 +419,13 @@ public class Server extends Thread {
 		}
 	}
 
-//	public static String randomString() {
-//		Random r = new Random();
-//		StringBuilder sb = new StringBuilder();
-//		for (int i = 0; i < 6; i++) {
-//			char c = (char) (r.nextInt((int) (Character.MAX_VALUE)));
-//			sb.append(c);
-//		}
-//		return sb.toString();
-//	}
+	// public static String randomString() {
+	// Random r = new Random();
+	// StringBuilder sb = new StringBuilder();
+	// for (int i = 0; i < 6; i++) {
+	// char c = (char) (r.nextInt((int) (Character.MAX_VALUE)));
+	// sb.append(c);
+	// }
+	// return sb.toString();
+	// }
 }
