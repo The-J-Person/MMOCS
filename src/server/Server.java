@@ -90,7 +90,7 @@ public class Server extends Thread {
 						new Server(i, s);
 						i++;
 					} else
-						System.out.println("Login successful for " + Info[0]
+						System.out.println("Login error for " + Info[0]
 								+ "!\n");
 					break;
 				case REGISTER:
