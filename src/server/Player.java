@@ -236,7 +236,7 @@ public class Player implements MapObject {
 		{
 			Resource R=ing.nextElement();
 			Inventory.put(R, Inventory.get(R)-ingrid.get(R));
-			//TODO Database Update inventory, remove items
+			DataBase.RemoveItemFromInventory(ID, R, ingrid.get(R));
 		}
 		if(Inventory.get(Crafted)!=null) Inventory.put(Crafted,Inventory.get(Crafted)+1);
 		else Inventory.put(Crafted,1);
