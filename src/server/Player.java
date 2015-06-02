@@ -158,6 +158,7 @@ public class Player implements MapObject {
 		{
 			if(Inventory.get(r)!=null) Inventory.put(r,Inventory.get(r)+1);
 			else Inventory.put(r,1);
+			//TODO Database Update inventory
 			add_event_to_stack(new Update(UpdateType.RESOURCES,r));
 		}
 		return true;
@@ -176,6 +177,7 @@ public class Player implements MapObject {
 		{
 			if(Inventory.get(r)!=null) Inventory.put(r,Inventory.get(r)+1);
 			else Inventory.put(r,1);
+			//TODO Database Update inventory
 			add_event_to_stack(new Update(UpdateType.RESOURCES,r));
 		}
 		return true;
@@ -213,5 +215,33 @@ public class Player implements MapObject {
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * 
+	 * @param Crafted
+	 * @return
+	 */
+	public boolean craft(Resource Crafted)
+	{
+		Hashtable<Resource,Integer> ingrid = Crafted.recipe();
+		Enumeration<common.Resource> ing=ingrid.keys();
+		while(ing.hasMoreElements())
+		{
+			Resource R=ing.nextElement();
+			if(!Inventory.containsKey(R) && Inventory.get(R) < ingrid.get(R)) return false;
+		}
+		ing = ingrid.keys();
+		while(ing.hasMoreElements())
+		{
+			Resource R=ing.nextElement();
+			Inventory.put(R, Inventory.get(R)-ingrid.get(R));
+			//TODO Database Update inventory, remove items
+		}
+		if(Inventory.get(Crafted)!=null) Inventory.put(Crafted,Inventory.get(Crafted)+1);
+		else Inventory.put(Crafted,1);
+
+		add_event_to_stack(new Update(UpdateType.RESOURCES,Crafted));
+		return true;
 	}
 }

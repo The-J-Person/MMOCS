@@ -1,5 +1,7 @@
 package common;
 
+import java.util.*;
+
 public enum Resource {
 	GRASS(0),
 	DIRT(1),
@@ -64,6 +66,32 @@ public enum Resource {
 			default:
 				return null;
 		}
+	}
+	
+	/**
+	 * Returns ingridients required to craft resource.
+	 * NULL if resource cannot be crafted.
+	 * @return
+	 */
+	public Hashtable<Resource,Integer> recipe()
+	{
+		Hashtable<Resource,Integer> rec=new Hashtable<Resource,Integer>();
+		switch(this)
+		{
+		case MUD:
+			rec.put(WATER,1);
+			rec.put(DIRT,1);
+			break;
+		case STONE_BRICK:
+			rec.put(STONE,1);
+			break;
+		case DOOR:
+			rec.put(WOOD,2);
+			break;
+		default:
+			rec=null;
+		}
+		return rec;
 	}
 	static final long serialVersionUID = 52013438;
 }
