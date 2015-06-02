@@ -44,7 +44,7 @@ public class Server extends Thread {
 			String[] Info;
 
 			// Connect socket to localhost , port 8080
-			ServerSocket m_ServerSocket = new ServerSocket(8080);
+			ServerSocket m_ServerSocket = new ServerSocket(15001);
 			// ServerSocket servers = new ServerSocket(8080, 0,
 			// InetAddress.getByName("localhost"));
 
@@ -76,18 +76,20 @@ public class Server extends Thread {
 
 				switch (to.getType()) {
 				case LOG_IN:
-
+					System.out.println("Log in attempt acquired. Confirming...\n");
 					Salt = DataBase.GetSalt(Info[1]);
 					Password = Cryptography.encrypt(Info[1], Salt);
 					if (server.Access.login(Info[0], Password)) {
+						System.out.println("Login successful for user " + Info[0] + "...\n");
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.LOG_IN)));
 						new Server(i, s);
 						i++;
 					}
+					else System.out.println("Login successful for " + Info[0] + "!\n");
 					break;
 				case REGISTER:
-
+					System.out.println("Registration attempt acquired. Validating...\n");
 					Salt = randomString();
 					Auth_Code = randomString();
 					Password = Cryptography.encrypt(Info[1], Salt);
@@ -96,9 +98,11 @@ public class Server extends Thread {
 							Auth_Code) == 0) {
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.REGISTER)));
+						System.out.println("Registration succeeded.\n");
 						SendMail(Info[0], Info[2], Auth_Code);
 						s.close();
 					} else {
+						System.out.println("Registration failed.\n");
 						loos.writeObject(new Update(
 								UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(false, RequestType.REGISTER)));
@@ -107,11 +111,14 @@ public class Server extends Thread {
 					break;
 
 				case CONFIRM:
+					System.out.println("Confirmation attempt acquired. Checking...\n");
 					if (server.Access.confirm(Info[0], Info[1])) {
+						System.out.println("Validated "+ Info[0] +"...\n");
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.CONFIRM)));
 						s.close(); // need return message !!!
 					} else {
+						System.out.println("Failed to validate "+ Info[0] +"...\n");
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(false, RequestType.CONFIRM)));
 						s.close(); // need return message !!!
@@ -119,6 +126,7 @@ public class Server extends Thread {
 					break;
 
 				default:
+					System.out.println("Received invalid request, ignoring...\n");
 					s.close();
 					break;
 				}
@@ -134,6 +142,7 @@ public class Server extends Thread {
 		// copy parameters
 		this.num = num;
 		this.s = s;
+		System.out.println("Starting a new player thread for player ID "+ Access.id);
 		// starting new thread
 		String name = "" + Access.id;
 		setDaemon(true);
