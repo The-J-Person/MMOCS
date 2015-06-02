@@ -189,8 +189,10 @@ public class Server extends Thread {
 
 					Request re = null;
 					Update up = null;
+					Resource resource = null;
 
 					re = (Request) ois.readObject();
+					resource = (Resource) re.getData();
 
 					// Update up = (Update)oos.writeObject(obj);
 					try {
@@ -216,6 +218,60 @@ public class Server extends Thread {
 							// TODO here must be an function
 							break;
 						case CRAFT:
+							switch (resource) {
+							case MUD:
+								if (pl.craft(resource)) {
+									oos.writeObject(new Update(
+											UpdateType.ACKNOWLEDGMENT,
+											new Acknowledgement(true,
+													RequestType.CRAFT)));
+									up = pl.getEvents();
+									oos.writeObject(up);
+
+								} else {
+									oos.writeObject(new Update(
+											UpdateType.ACKNOWLEDGMENT,
+											new Acknowledgement(false,
+													RequestType.CRAFT)));
+								}
+
+								break;
+							case DOOR:
+								if (pl.craft(resource)) {
+									oos.writeObject(new Update(
+											UpdateType.ACKNOWLEDGMENT,
+											new Acknowledgement(true,
+													RequestType.CRAFT)));
+									up = pl.getEvents();
+									oos.writeObject(up);
+
+								} else {
+									oos.writeObject(new Update(
+											UpdateType.ACKNOWLEDGMENT,
+											new Acknowledgement(false,
+													RequestType.CRAFT)));
+								}
+								break;
+							case STONE_BRICK:
+								if (pl.craft(resource)) {
+									oos.writeObject(new Update(
+											UpdateType.ACKNOWLEDGMENT,
+											new Acknowledgement(true,
+													RequestType.CRAFT)));
+									up = pl.getEvents();
+									oos.writeObject(up);
+
+								} else {
+									oos.writeObject(new Update(
+											UpdateType.ACKNOWLEDGMENT,
+											new Acknowledgement(false,
+													RequestType.CRAFT)));
+								}
+								break;
+
+							default:
+								break;
+							}
 
 							// TODO here must be an function
 							break;
@@ -406,9 +462,9 @@ public class Server extends Thread {
 			message.setSubject("Thank you for registering!");
 			message.setText("Greeting "
 					+ username
-					+ ",\n\n Your authentication code is:"
+					+ ",\n\n Your authentication code is: "
 					+ Auth_Code
-					+ "Please copy and paste this into the client to complete your registration!");
+					+ " Please copy and paste this into the client to complete your registration!");
 
 			Transport.send(message);
 
