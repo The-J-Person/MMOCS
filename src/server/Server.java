@@ -90,8 +90,9 @@ public class Server extends Thread {
 					break;
 				case REGISTER:
 					System.out.println("Registration attempt acquired. Validating...\n");
-					Salt = randomString();
-					Auth_Code = randomString();
+					//Salt = randomString();
+					Salt = AuthCode.generatKey();
+					Auth_Code = AuthCode.generatKey();
 					Password = Cryptography.encrypt(Info[1], Salt);
 
 					if (server.Access.newUser(Info[0], Password, Salt, Info[2],
@@ -398,13 +399,13 @@ public class Server extends Thread {
 		}
 	}
 
-	public static String randomString() {
-		Random r = new Random();
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < 6; i++) {
-			char c = (char) (r.nextInt((int) (Character.MAX_VALUE)));
-			sb.append(c);
-		}
-		return sb.toString();
-	}
+//	public static String randomString() {
+//		Random r = new Random();
+//		StringBuilder sb = new StringBuilder();
+//		for (int i = 0; i < 6; i++) {
+//			char c = (char) (r.nextInt((int) (Character.MAX_VALUE)));
+//			sb.append(c);
+//		}
+//		return sb.toString();
+//	}
 }
