@@ -178,6 +178,7 @@ public class Server extends Thread {
 			//oos1.writeObject(pl.Inventory);
 			oos1.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates() ));
 			oos1.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory ));
+			oos1.writeObject(new Update(UpdateType.HIT_POINTS, pl.Health ));
 			
 
 			while (s.isConnected()) {
