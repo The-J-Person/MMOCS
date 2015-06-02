@@ -86,6 +86,7 @@ public class Server extends Thread {
 								+ Info[0] + "...\n");
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.LOG_IN)));
+						System.out.println("Sent ACK to : " + Info[0]);
 						new Server(i, s);
 						i++;
 					} else
