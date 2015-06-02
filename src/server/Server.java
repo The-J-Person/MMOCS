@@ -173,6 +173,7 @@ public class Server extends Thread {
 
 			oos1.writeObject(pl.Coordinates());
 			oos1.writeObject(pl.Health());
+			oos1.writeObject(pl.Inventory);
 
 			while (s.isConnected()) {
 
