@@ -15,6 +15,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.NewsAddress;
 
 /**
  *
@@ -171,9 +172,12 @@ public class Server extends Thread {
 					s.getOutputStream());// getting data from server
 											// to client
 
-			oos1.writeObject(pl.Coordinates());
-			oos1.writeObject(pl.Health());
-			oos1.writeObject(pl.Inventory);
+			//oos1.writeObject(pl.Coordinates());
+			//oos1.writeObject(pl.Health());
+			//oos1.writeObject(pl.Inventory);
+			oos1.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates() ));
+			oos1.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory ));
+			
 
 			while (s.isConnected()) {
 
