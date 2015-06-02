@@ -79,7 +79,7 @@ public class Server extends Thread {
 				case LOG_IN:
 					System.out
 							.println("Log in attempt acquired. Confirming...\n");
-					Salt = DataBase.GetSalt(Info[1]);
+					Salt = DataBase.GetSalt(Info[0]);
 					Password = Cryptography.encrypt(Info[1], Salt);
 					if (server.Access.login(Info[0], Password)) {
 						System.out.println("Login successful for user "
