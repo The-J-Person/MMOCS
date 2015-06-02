@@ -535,7 +535,7 @@ public class DataBase {
 		try{
 			Player plr = null;
 			Connection con = get_connection();
-			CallableStatement prc = con.prepareCall("{call Get_Player_By_ID(?,?,?,?)}");
+			CallableStatement prc = con.prepareCall("{call Get_Player_By_ID(?,?)}");
 			prc.setInt(1, UserID);
 			prc.registerOutParameter(2, Types.INTEGER);
 			prc.execute();
