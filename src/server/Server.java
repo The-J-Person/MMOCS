@@ -22,7 +22,7 @@ import javax.mail.internet.NewsAddress;
  * 
  *
  */
- 
+
 public class Server extends Thread {
 
 	Socket s;
@@ -31,11 +31,6 @@ public class Server extends Thread {
 	private static String s_pwd; // Sender password for email sending
 	private static String s_host;// Sender host for email sending
 	private static final String data_file = "email.txt";
-
-	// private ServerSocket servers;
-	// private BufferedReader input;
-	// private PrintStream output;
-	// private Scanner scan = new Scanner(System.in);
 
 	public static void main(String[] args) {
 		get_sender_email();
@@ -46,16 +41,14 @@ public class Server extends Thread {
 			String Salt, Auth_Code, Password;
 			String[] Info;
 
-			// Connect socket to localhost , port 8080
+			// Connect socket to localhost , port 15001
 			ServerSocket m_ServerSocket = new ServerSocket(15001);
-			// ServerSocket servers = new ServerSocket(8080, 0,
-			// InetAddress.getByName("localhost"));
 
 			System.out.println("Server is started");
-			// // listing for port.
-			// // waiting for new connection , after it running the client in
-			// // new socket connection
-			// // we increase i by 1
+			/*
+			 * listing for port. waiting for new connection , after it running
+			 * the client in new socket connection we increase i by 1
+			 */
 
 			while (true) {
 				Socket s = m_ServerSocket.accept();
@@ -149,11 +142,13 @@ public class Server extends Thread {
 		} // printing errors
 
 	}
-/**
- * 
- * @param num
- * @param s
- */
+
+	/**
+	 * Starting a new Thread , given him a ID name of client.
+	 * 
+	 * @param num
+	 * @param s
+	 */
 	public Server(int num, Socket s) {
 		// copy parameters
 		this.num = num;
@@ -168,6 +163,10 @@ public class Server extends Thread {
 		start();
 	}
 
+	/**
+	 * kind main function of the game All events happened here , receive and
+	 * switch by request type of event. Ignore unknown requests.
+	 */
 	public void run() {
 		try {
 
@@ -179,9 +178,6 @@ public class Server extends Thread {
 					s.getOutputStream());// getting data from server
 											// to client
 
-			// oos1.writeObject(pl.Coordinates());
-			// oos1.writeObject(pl.Health());
-			// oos1.writeObject(pl.Inventory);
 			oos1.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates()));
 			oos1.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory));
 			oos1.writeObject(new Update(UpdateType.HIT_POINTS, pl.Health));
@@ -227,65 +223,23 @@ public class Server extends Thread {
 
 							}
 
-							// TODO here must be an function
 							break;
 						case CRAFT:
-							switch (resource) {
-							case MUD:
-								if (pl.craft(resource)) {
-									oos.writeObject(new Update(
-											UpdateType.ACKNOWLEDGMENT,
-											new Acknowledgement(true,
-													RequestType.CRAFT)));
-									up = pl.getEvents();
-									oos.writeObject(up);
+							if (pl.craft(resource)) {
+								oos.writeObject(new Update(
+										UpdateType.ACKNOWLEDGMENT,
+										new Acknowledgement(true,
+												RequestType.CRAFT)));
+								up = pl.getEvents();
+								oos.writeObject(up);
 
-								} else {
-									oos.writeObject(new Update(
-											UpdateType.ACKNOWLEDGMENT,
-											new Acknowledgement(false,
-													RequestType.CRAFT)));
-								}
-
-								break;
-							case DOOR:
-								if (pl.craft(resource)) {
-									oos.writeObject(new Update(
-											UpdateType.ACKNOWLEDGMENT,
-											new Acknowledgement(true,
-													RequestType.CRAFT)));
-									up = pl.getEvents();
-									oos.writeObject(up);
-
-								} else {
-									oos.writeObject(new Update(
-											UpdateType.ACKNOWLEDGMENT,
-											new Acknowledgement(false,
-													RequestType.CRAFT)));
-								}
-								break;
-							case STONE_BRICK:
-								if (pl.craft(resource)) {
-									oos.writeObject(new Update(
-											UpdateType.ACKNOWLEDGMENT,
-											new Acknowledgement(true,
-													RequestType.CRAFT)));
-									up = pl.getEvents();
-									oos.writeObject(up);
-
-								} else {
-									oos.writeObject(new Update(
-											UpdateType.ACKNOWLEDGMENT,
-											new Acknowledgement(false,
-													RequestType.CRAFT)));
-								}
-								break;
-
-							default:
-								break;
+							} else {
+								oos.writeObject(new Update(
+										UpdateType.ACKNOWLEDGMENT,
+										new Acknowledgement(false,
+												RequestType.CRAFT)));
 							}
 
-							// TODO here must be an function
 							break;
 						case HARVEST:
 							co = (Coordinate) re.getData();
@@ -407,11 +361,14 @@ public class Server extends Thread {
 			}
 
 		} catch (Exception e) {
-			System.out.println("init error: " + e + "\n");
-			System.out.println("Close connection for ID : " + this.getName() + "\n");
+			System.out.println("Close connection for ID : " + this.getName()
+					+ "\n");
 		}
 	}
 
+	/**
+ * 
+ */
 	public static void get_sender_email() {
 		String line;
 		try {

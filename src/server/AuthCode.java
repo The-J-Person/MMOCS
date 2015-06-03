@@ -3,6 +3,10 @@ package server;
 import java.util.Random;
 
 public class AuthCode {
+	/**
+	 * function creating random code length equal to 5 chars.
+	 * @return result
+	 */
 	public static String generatKey(){
 		String alphabet = 
 		        new String("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"); //9
