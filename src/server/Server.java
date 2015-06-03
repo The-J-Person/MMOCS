@@ -179,8 +179,11 @@ public class Server extends Thread {
 											// to client
 
 			oos1.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates()));
+			System.out.println("Sent coordinates to " + this.getName() + "\n");
 			oos1.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory));
+			System.out.println("Sent inventory to " + this.getName() + "\n");
 			oos1.writeObject(new Update(UpdateType.HIT_POINTS, pl.Health));
+			System.out.println("Sent Health to " + this.getName() + "\n");
 
 			while (s.isConnected()) {
 
@@ -198,7 +201,7 @@ public class Server extends Thread {
 					Request re = null;
 					Update up = null;
 					Resource resource = null;
-
+					System.out.println("Got request from " + this.getName() + "\n");
 					re = (Request) ois.readObject();
 					resource = (Resource) re.getData();
 
@@ -292,12 +295,14 @@ public class Server extends Thread {
 							break;
 
 						case MOVE:
+							System.out.println("Request of " + this.getName() + " is Move request.\n");
 							co = (Coordinate) re.getData();
 							if (pl.Move(co)) {
 								up = new Update(UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(true,
 												RequestType.MOVE));
 								oos.writeObject(up);
+								System.out.println("Sent move ack to " + this.getName() + "\n");
 							} else {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
@@ -307,6 +312,7 @@ public class Server extends Thread {
 							break;
 
 						case TILE:
+							System.out.println("Request of " + this.getName() + " is Tile.\n");
 							co = (Coordinate) re.getData();
 							if (pl.see_Tile(co)) {
 
@@ -314,6 +320,7 @@ public class Server extends Thread {
 										.get_tile_at(co, true);
 								up = new Update(UpdateType.TILE, toClient);
 								oos.writeObject(up);
+								System.out.println("Sent Tile to " + this.getName() + "\n");
 							} else {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
