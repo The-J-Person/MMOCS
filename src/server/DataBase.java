@@ -552,7 +552,7 @@ public class DataBase {
 		}
 	}
 	
-	public static int GetPlayerCoordByID(Coordinate coord)
+	public static int GetPlayerIDByCoordinate(Coordinate coord)
 	{
 		try{
 			Connection con = get_connection();
@@ -676,6 +676,46 @@ public class DataBase {
 				flag = SQLOutput.NO;
 			else if(result == 2)
 				flag = SQLOutput.EXISTS;
+			con.close();
+			return flag;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return SQLOutput.SQL_ERROR;
+		}
+	}
+	
+	public static int GetHPOfPlayer(int ID)
+	{
+		try{
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Get_HP_Of_Player(?,?)}");
+			prc.setInt(1, ID);
+			prc.registerOutParameter(2, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(2);
+			if(result == -1)
+				result = -1;
+			con.close();
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -2;
+		}
+	}
+	
+	public static SQLOutput SetHPOfPlayer(int ID, int HP)
+	{
+		try{
+			SQLOutput flag = SQLOutput.OK;
+			Connection con = get_connection();
+			CallableStatement prc = con.prepareCall("{call Set_HP_Of_Player(?,?,?)}");
+			prc.setInt(1, ID);
+			prc.setInt(2, HP);
+			prc.registerOutParameter(3, Types.INTEGER);
+			prc.execute();
+			int result = prc.getInt(3);
+			if(result == 0)
+				flag =  SQLOutput.NOT_FOUND;
 			con.close();
 			return flag;
 		} catch (SQLException e) {
