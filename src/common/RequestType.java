@@ -13,4 +13,9 @@ public enum RequestType {
 	CONFIRM;
 	
 	static final long serialVersionUID = 12142322;
+	
+	public boolean requireAck(){
+		return (this == MOVE || this == ATTACK || this == HARVEST || this == LOG_IN || this == REGISTER || this == CRAFT
+				|| this == CONFIRM); 
+	}
 }
