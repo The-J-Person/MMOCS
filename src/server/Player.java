@@ -67,8 +67,8 @@ public class Player implements MapObject {
 			orig.setMapObjectType(null);
 			C = co;
 			dest.setMapObjectType(MapObjectType.PLAYER);
-			WorldMap.getInstance().update_tile(dest);
 			WorldMap.getInstance().update_tile(orig);
+			WorldMap.getInstance().update_tile(dest);
 			DataBase.UpdatePlayerLocation(ID, C);
 			return true;
 		}
