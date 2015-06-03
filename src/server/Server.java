@@ -198,9 +198,9 @@ public class Server extends Thread {
 					Request re = null;
 					Update up = null;
 					Resource resource = null;
-					System.out.println("Got request from " + this.getName() + "\n");
 					re = (Request) ois.readObject();
-					resource = (Resource) re.getData();
+					//resource = (Resource) re.getData(); //Why is this here, Ed?
+					System.out.println("Got request from " + this.getName() + " : " + re.getType() + "\n");
 
 					// Update up = (Update)oos.writeObject(obj);
 					try {
