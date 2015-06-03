@@ -87,6 +87,7 @@ public class Server extends Thread {
 						new Server(i, s, loos, lois);
 						i++;
 					} else
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.LOG_IN)));
 						System.out
 								.println("Login error for " + Info[0] + "!\n");
 					break;
