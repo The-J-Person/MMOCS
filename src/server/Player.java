@@ -107,6 +107,7 @@ public class Player implements MapObject {
 	public void Damage(int amount) {
 		Health=Health-amount;
 		add_event_to_stack(new Update(UpdateType.HIT_POINTS,Health));
+		//TODO something something database hitpoints after recovery is implemented...
 	}
 	
 	public boolean isAdmin()

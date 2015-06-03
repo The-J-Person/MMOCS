@@ -51,6 +51,7 @@ public class WorldMap {
 			{
 				/* GENERATE NEW MAP */
 				List<Tile> neighbors = new ArrayList<Tile>();
+				neighbors.add(new Tile(0,0,FloorType.GRASS,MapObjectType.BUSH));
 				//Will now look at the...
 				//Bottom Left
 				Tile check=get_tile_at(new Coordinate(c.X()-1,c.Y()-1), false);
@@ -80,7 +81,7 @@ public class WorldMap {
 				Tile generated = generate_tile(c,neighbors);
 				/* Update DB */
 				map.put(c,generated);
-				DataBase.SetTile(req);
+				DataBase.SetTile(generated);
 				/* Return generated Tile */
 				return generated;
 			}
@@ -180,7 +181,7 @@ public class WorldMap {
 	public void login(Player P)
 	{
 		//thingsOnMap.put(P.Coordinates(), P);
-		Tile PT = get_tile_at(P.Coordinates(),false);
+		Tile PT = get_tile_at(P.Coordinates(),!P.admin);
 		PT.setMapObjectType(MapObjectType.PLAYER);
 		update_tile(PT);
 		players.add(P);

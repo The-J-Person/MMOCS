@@ -91,7 +91,7 @@ public class Monster implements MapObject{
 	}
 	@Override
 	public void Damage(int amount) {
-		// TODO Auto-generated method stub
+		CurrentHP=CurrentHP-amount;
 		
 	}
 
