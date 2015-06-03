@@ -18,9 +18,11 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.NewsAddress;
 
 /**
- *
+ * 
+ * 
  *
  */
+ 
 public class Server extends Thread {
 
 	Socket s;
@@ -90,8 +92,8 @@ public class Server extends Thread {
 						new Server(i, s);
 						i++;
 					} else
-						System.out.println("Login error for " + Info[0]
-								+ "!\n");
+						System.out
+								.println("Login error for " + Info[0] + "!\n");
 					break;
 				case REGISTER:
 					System.out
@@ -147,7 +149,11 @@ public class Server extends Thread {
 		} // printing errors
 
 	}
-
+/**
+ * 
+ * @param num
+ * @param s
+ */
 	public Server(int num, Socket s) {
 		// copy parameters
 		this.num = num;
@@ -173,13 +179,12 @@ public class Server extends Thread {
 					s.getOutputStream());// getting data from server
 											// to client
 
-			//oos1.writeObject(pl.Coordinates());
-			//oos1.writeObject(pl.Health());
-			//oos1.writeObject(pl.Inventory);
-			oos1.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates() ));
-			oos1.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory ));
-			oos1.writeObject(new Update(UpdateType.HIT_POINTS, pl.Health ));
-			
+			// oos1.writeObject(pl.Coordinates());
+			// oos1.writeObject(pl.Health());
+			// oos1.writeObject(pl.Inventory);
+			oos1.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates()));
+			oos1.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory));
+			oos1.writeObject(new Update(UpdateType.HIT_POINTS, pl.Health));
 
 			while (s.isConnected()) {
 
@@ -402,9 +407,9 @@ public class Server extends Thread {
 			}
 
 		} catch (Exception e) {
-			System.out.println("init error: " + e);
+			System.out.println("init error: " + e + "\n");
+			System.out.println("Close connection for ID : " + this.getName() + "\n");
 		}
-
 	}
 
 	public static void get_sender_email() {
@@ -481,14 +486,4 @@ public class Server extends Thread {
 			throw new RuntimeException(e);
 		}
 	}
-
-	// public static String randomString() {
-	// Random r = new Random();
-	// StringBuilder sb = new StringBuilder();
-	// for (int i = 0; i < 6; i++) {
-	// char c = (char) (r.nextInt((int) (Character.MAX_VALUE)));
-	// sb.append(c);
-	// }
-	// return sb.toString();
-	// }
 }
