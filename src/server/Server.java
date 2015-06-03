@@ -354,14 +354,17 @@ public class Server extends Thread {
 
 				}// end if
 					// if user Deactivation , we will check events
-				else {
-					Update newUP = pl.getEvents();
-					if (pl.getEvents() == null)
-						continue;
-					else {
-						oos.writeObject(newUP);
-					}
-
+//				else {
+//					Update newUP = pl.getEvents();
+//					if (pl.getEvents() == null)
+//						continue;
+//					else {
+//						oos.writeObject(newUP);
+//					}
+				Update newUP = pl.getEvents();
+				while (newUP != null){
+					oos.writeObject(newUP);
+					newUP = pl.getEvents();
 				}
 			}
 
