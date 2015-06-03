@@ -6,7 +6,6 @@ package common;
  *
  */
 public enum MapObjectType {
-	NONE(-1),
 	PLAYER(0), //Identification of player's own self and other players.
 	MONSTER(1),
 	BUSH(2),
@@ -32,7 +31,7 @@ public enum MapObjectType {
 	}
 	public boolean canHarvest(){
 		//return (this == TREE || this == BUSH || this == ROCK);
-		return (this != PLAYER && this != MONSTER && this!=NONE && this!=NONE);
+		return (this != PLAYER && this != MONSTER);
 	}
 	
 	public Resource resource()

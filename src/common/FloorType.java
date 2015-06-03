@@ -5,7 +5,6 @@ package common;
 *
 */
 public enum FloorType {
-	NONE(-1),
 	GRASS(0),
 	DIRT(1),
 	WATER(2),
