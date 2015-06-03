@@ -344,6 +344,7 @@ public class Server extends Thread {
 							break;
 
 						default:
+							System.out.println("Request by " + this.getName() + " not understood.\n");
 							break;
 						}
 
