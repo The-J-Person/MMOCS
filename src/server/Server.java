@@ -27,6 +27,8 @@ public class Server extends Thread {
 
 	Socket s;
 	int num;
+	ObjectInputStream lois;
+	ObjectOutputStream loos;
 	private static String s_usr; // Sender user for email sending
 	private static String s_pwd; // Sender password for email sending
 	private static String s_host;// Sender host for email sending
@@ -82,7 +84,7 @@ public class Server extends Thread {
 						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
 								new Acknowledgement(true, RequestType.LOG_IN)));
 						System.out.println("Sent ACK to : " + Info[0]);
-						new Server(i, s);
+						new Server(i, s, loos, lois);
 						i++;
 					} else
 						System.out
@@ -149,10 +151,12 @@ public class Server extends Thread {
 	 * @param num
 	 * @param s
 	 */
-	public Server(int num, Socket s) {
+	public Server(int num, Socket s, ObjectOutputStream loos1, ObjectInputStream lois1) {
 		// copy parameters
 		this.num = num;
 		this.s = s;
+		this.lois = lois1;
+		this.loos = loos1;
 		System.out.println("Starting a new player thread for player ID "
 				+ Access.id);
 		// starting new thread
@@ -174,26 +178,19 @@ public class Server extends Thread {
 			Player pl = server.DataBase.GetPlayerByID(Integer.parseInt(this
 					.getName()));
 
-			ObjectOutputStream oos1 = new ObjectOutputStream(
-					s.getOutputStream());// getting data from server
+			ObjectOutputStream oos = loos;// getting data from server
 											// to client
+			ObjectInputStream ois = lois;
 
-			oos1.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates()));
+			oos.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates()));
 			System.out.println("Sent coordinates to " + this.getName() + "\n");
-			oos1.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory));
+			oos.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory));
 			System.out.println("Sent inventory to " + this.getName() + "\n");
-			oos1.writeObject(new Update(UpdateType.HIT_POINTS, pl.Health));
+			oos.writeObject(new Update(UpdateType.HIT_POINTS, pl.Health));
 			System.out.println("Sent Health to " + this.getName() + "\n");
 
 			while (s.isConnected()) {
 
-				ObjectInputStream ois = new ObjectInputStream(
-						s.getInputStream());// getting data from client
-											// socket
-
-				ObjectOutputStream oos = new ObjectOutputStream(
-						s.getOutputStream());// getting data from server
-												// to client
 				int check = s.getInputStream().available();
 
 				if (check > 0) {
