@@ -6,7 +6,7 @@ package common;
  *
  */
 public enum MapObjectType {
-	NONE(-1),
+	NONE(404),
 	PLAYER(0), //Identification of player's own self and other players.
 	MONSTER(1),
 	BUSH(2),
