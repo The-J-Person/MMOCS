@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class Player implements MapObject {
 
-	public static final int distance=5;
+	public static final int distance=6;
 	public static final int BaseHealth=10; //Randomly picked
 	Coordinate C;
 	Hashtable<Resource,Integer> Inventory;
