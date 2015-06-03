@@ -364,6 +364,11 @@ public class Server extends Thread {
 				Update newUP = pl.getEvents();
 				while (newUP != null){
 					oos.writeObject(newUP);
+					System.out.print("Sent " +newUP.getType()+ "to Player " + this.getName() + "\n");
+					if(newUP.getData() instanceof Tile) {
+						Tile tile = (Tile)newUP.getData();
+						System.out.println(tile.getCoordinate().X()+","+tile.getCoordinate().Y() + ":" +tile.getFloorType() + "," + tile.getMapObjectType());
+					}
 					newUP = pl.getEvents();
 				}
 			}
