@@ -51,7 +51,7 @@ public class WorldMap {
 			{
 				/* GENERATE NEW MAP */
 				List<Tile> neighbors = new ArrayList<Tile>();
-				neighbors.add(new Tile(0,0,FloorType.GRASS,MapObjectType.BUSH));
+				//neighbors.add(new Tile(0,0,FloorType.GRASS,MapObjectType.BUSH)); DEBUG
 				//Will now look at the...
 				//Bottom Left
 				Tile check=get_tile_at(new Coordinate(c.X()-1,c.Y()-1), false);
@@ -83,11 +83,14 @@ public class WorldMap {
 				map.put(c,generated);
 				DataBase.SetTile(generated);
 				/* Return generated Tile */
+				if(generated.getMapObjectType()==null) generated.setMapObjectType(MapObjectType.NONE);
 				return generated;
 			}
 			else return null;
 		}
-		return map.get(c);//Correct floor?
+		Tile t = map.get(c);//Correct floor?
+		if(t.getMapObjectType()==null) t.setMapObjectType(MapObjectType.NONE);
+		return t;
 	}
 	
 	/**
@@ -127,11 +130,15 @@ public class WorldMap {
 	public void update_tile(Tile t)
 	{
 		map.put(t.getCoordinate(), t);
+		System.out.println("Updated tile at "+t.getCoordinate().X()+","+t.getCoordinate().Y()+"\n");
+		System.out.println("Set to "+t.getFloorType()+","+t.getMapObjectType()+"\n");
 		DataBase.SetTile(t); // Maybe ignore monsters and players?
 		for(int i=0;i<players.size();i++)
 		{
-			if(players.get(i).see_Tile(t.getCoordinate())) 
-				players.get(i).add_event_to_stack(new Update(UpdateType.TILE,t));
+			if(players.get(i).see_Tile(t.getCoordinate())) {
+					if(t.getMapObjectType()==null) t.setMapObjectType(MapObjectType.NONE);
+					players.get(i).add_event_to_stack(new Update(UpdateType.TILE,t));
+				}
 		}
 	}
 	

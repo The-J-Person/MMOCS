@@ -372,7 +372,6 @@ public class Server extends Thread {
 				Update newUP = pl.getEvents();
 				while (newUP != null) {
 					oos.writeObject(newUP);
-					oos.flush();
 					System.out.print("Sent " + newUP.getType() + "to Player "
 							+ this.getName() + "\n");
 					if (newUP.getData() instanceof Tile) {
