@@ -87,14 +87,13 @@ public class Server extends Thread {
 						new Server(i, s, loos, lois);
 						i++;
 					} else
-						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT, new Acknowledgement(false, RequestType.LOG_IN)));
-						System.out
-								.println("Login error for " + Info[0] + "!\n");
+						loos.writeObject(new Update(UpdateType.ACKNOWLEDGMENT,
+								new Acknowledgement(false, RequestType.LOG_IN)));
+					System.out.println("Login error for " + Info[0] + "!\n");
 					break;
 				case REGISTER:
 					System.out
 							.println("Registration attempt acquired. Validating...\n");
-					// Salt = randomString();
 					Salt = AuthCode.generatKey();
 					Auth_Code = AuthCode.generatKey();
 					Password = Cryptography.encrypt(Info[1], Salt);
@@ -152,7 +151,8 @@ public class Server extends Thread {
 	 * @param num
 	 * @param s
 	 */
-	public Server(int num, Socket s, ObjectOutputStream loos1, ObjectInputStream lois1) {
+	public Server(int num, Socket s, ObjectOutputStream loos1,
+			ObjectInputStream lois1) {
 		// copy parameters
 		this.num = num;
 		this.s = s;
@@ -200,8 +200,10 @@ public class Server extends Thread {
 					Update up = null;
 					Resource resource = null;
 					re = (Request) ois.readObject();
-					//resource = (Resource) re.getData(); //Why is this here, Ed?
-					System.out.println("Got request from " + this.getName() + " : " + re.getType() + "\n");
+					// resource = (Resource) re.getData(); //Why is this here,
+					// Ed?
+					System.out.println("Got request from " + this.getName()
+							+ " : " + re.getType() + "\n");
 
 					// Update up = (Update)oos.writeObject(obj);
 					try {
@@ -293,14 +295,16 @@ public class Server extends Thread {
 							break;
 
 						case MOVE:
-							System.out.println("Request of " + this.getName() + " is Move request.\n");
+							System.out.println("Request of " + this.getName()
+									+ " is Move request.\n");
 							co = (Coordinate) re.getData();
 							if (pl.Move(co)) {
 								up = new Update(UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(true,
 												RequestType.MOVE));
 								oos.writeObject(up);
-								System.out.println("Sent move ack to " + this.getName() + "\n");
+								System.out.println("Sent move ack to "
+										+ this.getName() + "\n");
 							} else {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
@@ -310,7 +314,8 @@ public class Server extends Thread {
 							break;
 
 						case TILE:
-							System.out.println("Request of " + this.getName() + " is Tile.\n");
+							System.out.println("Request of " + this.getName()
+									+ " is Tile.\n");
 							co = (Coordinate) re.getData();
 							if (pl.see_Tile(co)) {
 
@@ -318,7 +323,8 @@ public class Server extends Thread {
 										.get_tile_at(co, true);
 								up = new Update(UpdateType.TILE, toClient);
 								oos.writeObject(up);
-								System.out.println("Sent Tile to " + this.getName() + "\n");
+								System.out.println("Sent Tile to "
+										+ this.getName() + "\n");
 							} else {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
@@ -345,7 +351,8 @@ public class Server extends Thread {
 							break;
 
 						default:
-							System.out.println("Request by " + this.getName() + " not understood.\n");
+							System.out.println("Request by " + this.getName()
+									+ " not understood.\n");
 							break;
 						}
 
@@ -355,20 +362,25 @@ public class Server extends Thread {
 
 				}// end if
 					// if user Deactivation , we will check events
-//				else {
-//					Update newUP = pl.getEvents();
-//					if (pl.getEvents() == null)
-//						continue;
-//					else {
-//						oos.writeObject(newUP);
-//					}
+					// else {
+				// Update newUP = pl.getEvents();
+				// if (pl.getEvents() == null)
+				// continue;
+				// else {
+				// oos.writeObject(newUP);
+				// }
 				Update newUP = pl.getEvents();
-				while (newUP != null){
+				while (newUP != null) {
 					oos.writeObject(newUP);
-					System.out.print("Sent " +newUP.getType()+ "to Player " + this.getName() + "\n");
-					if(newUP.getData() instanceof Tile) {
-						Tile tile = (Tile)newUP.getData();
-						System.out.println(tile.getCoordinate().X()+","+tile.getCoordinate().Y() + ":" +tile.getFloorType() + "," + tile.getMapObjectType());
+					oos.flush();
+					System.out.print("Sent " + newUP.getType() + "to Player "
+							+ this.getName() + "\n");
+					if (newUP.getData() instanceof Tile) {
+						Tile tile = (Tile) newUP.getData();
+						System.out.println(tile.getCoordinate().X() + ","
+								+ tile.getCoordinate().Y() + ":"
+								+ tile.getFloorType() + ","
+								+ tile.getMapObjectType());
 					}
 					newUP = pl.getEvents();
 				}
