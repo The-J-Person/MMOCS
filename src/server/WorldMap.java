@@ -225,4 +225,9 @@ public class WorldMap {
 				players.get(i).Damage(amount);
 		}
 	}
+	
+	public int howmanyplayers()
+	{
+		return players.size();
+	}
 }

@@ -51,7 +51,7 @@ public class Server extends Thread {
 			 * listing for port. waiting for new connection , after it running
 			 * the client in new socket connection we increase i by 1
 			 */
-
+			new MonsterSpawner();// ONE SPAWNER ONLY
 			while (true) {
 				Socket s = m_ServerSocket.accept();
 				ObjectInputStream lois = new ObjectInputStream(
