@@ -386,6 +386,8 @@ public class Server extends Thread {
 
 					} catch (Exception e) {
 						System.out.print(e.getMessage());
+						pl.logout();
+						s.close();
 					}
 
 				}// end if
