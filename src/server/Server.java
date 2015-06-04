@@ -266,9 +266,9 @@ public class Server extends Thread {
 											new Acknowledgement(true,
 													RequestType.HARVEST)));
 									oos.reset();
-									up = pl.getEvents();
-									oos.writeObject(up);
-									oos.reset();
+									//up = pl.getEvents();
+									//oos.writeObject(pl.getEvents());
+									//oos.reset();
 
 								} else {
 									oos.writeObject(new Update(
@@ -285,9 +285,9 @@ public class Server extends Thread {
 											new Acknowledgement(true,
 													RequestType.HARVEST)));
 									oos.reset();
-									up = pl.getEvents();
-									oos.writeObject(up);
-									oos.reset();
+									//up = pl.getEvents();
+									//oos.writeObject(up);
+									//oos.reset();
 
 								} else {
 									oos.writeObject(new Update(
