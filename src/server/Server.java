@@ -180,14 +180,21 @@ public class Server extends Thread {
 					.getName()));
 
 			ObjectOutputStream oos = loos;// getting data from server
-											// to client
+			
+			oos.flush();// to client
+			
 			ObjectInputStream ois = lois;
+			
+			
 
 			oos.writeObject(new Update(UpdateType.COORDINATE, pl.Coordinates()));
+			oos.flush();
 			System.out.println("Sent coordinates to " + this.getName() + "\n");
 			oos.writeObject(new Update(UpdateType.INVENTORY, pl.Inventory));
+			oos.flush();
 			System.out.println("Sent inventory to " + this.getName() + "\n");
 			oos.writeObject(new Update(UpdateType.HIT_POINTS, pl.Health));
+			oos.flush();
 			System.out.println("Sent Health to " + this.getName() + "\n");
 
 			while (s.isConnected()) {
@@ -215,14 +222,17 @@ public class Server extends Thread {
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(true,
 												RequestType.ATTACK)));
+								oos.flush();
 								up = pl.getEvents();
 								oos.writeObject(up);
+								oos.flush();
 
 							} else {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.ATTACK)));
+								oos.flush();
 
 							}
 
@@ -233,14 +243,17 @@ public class Server extends Thread {
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(true,
 												RequestType.CRAFT)));
+								oos.flush();
 								up = pl.getEvents();
 								oos.writeObject(up);
+								oos.flush();
 
 							} else {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.CRAFT)));
+								oos.flush();
 							}
 
 							break;
@@ -252,14 +265,17 @@ public class Server extends Thread {
 											UpdateType.ACKNOWLEDGMENT,
 											new Acknowledgement(true,
 													RequestType.HARVEST)));
+									oos.flush();
 									up = pl.getEvents();
 									oos.writeObject(up);
+									oos.flush();
 
 								} else {
 									oos.writeObject(new Update(
 											UpdateType.ACKNOWLEDGMENT,
 											new Acknowledgement(false,
 													RequestType.HARVEST)));
+									oos.flush();
 								}
 
 							} else {
@@ -268,14 +284,17 @@ public class Server extends Thread {
 											UpdateType.ACKNOWLEDGMENT,
 											new Acknowledgement(true,
 													RequestType.HARVEST)));
+									oos.flush();
 									up = pl.getEvents();
 									oos.writeObject(up);
+									oos.flush();
 
 								} else {
 									oos.writeObject(new Update(
 											UpdateType.ACKNOWLEDGMENT,
 											new Acknowledgement(false,
 													RequestType.HARVEST)));
+									oos.flush();
 								}
 							}
 							break;
@@ -285,12 +304,14 @@ public class Server extends Thread {
 									UpdateType.ACKNOWLEDGMENT,
 									new Acknowledgement(true,
 											RequestType.LOG_OUT)));
+							oos.flush();
 							s.close(); // need return message !!!
 							if (s.isConnected()) {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.LOG_OUT)));
+								oos.flush();
 							}
 							break;
 
@@ -303,6 +324,7 @@ public class Server extends Thread {
 										new Acknowledgement(true,
 												RequestType.MOVE));
 								oos.writeObject(up);
+								oos.flush();
 								System.out.println("Sent move ack to "
 										+ this.getName() + "\n");
 							} else {
@@ -310,6 +332,7 @@ public class Server extends Thread {
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.MOVE)));
+								oos.flush();
 							}
 							break;
 
@@ -323,6 +346,7 @@ public class Server extends Thread {
 										.get_tile_at(co, true);
 								up = new Update(UpdateType.TILE, toClient);
 								oos.writeObject(up);
+								oos.flush();
 								System.out.println("Sent Tile to "
 										+ this.getName() + "\n");
 							} else {
@@ -330,6 +354,7 @@ public class Server extends Thread {
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.TILE)));
+								oos.flush();
 							}
 							break;
 
@@ -342,11 +367,13 @@ public class Server extends Thread {
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(true,
 												RequestType.UPDATE_TILE)));
+								oos.flush();
 							} else {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(false,
 												RequestType.UPDATE_TILE)));
+								oos.flush();
 							}
 							break;
 
