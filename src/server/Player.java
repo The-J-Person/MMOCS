@@ -132,7 +132,21 @@ public class Player implements MapObject {
 	public boolean change_Tile(Tile Ti)
 	{
 		if(!admin && Ti.getCoordinate().distance(C)>distance) return false;
-		//TODO Check inventory
+		Tile tar = WorldMap.getInstance().get_tile_at(Ti.getCoordinate(), false);
+		if(tar.getFloorType()!=Ti.getFloorType())
+		{
+			Integer am=Inventory.get(Ti.getFloorType().resource());
+			if(am==null || am == 0) return false;
+			Inventory.put(Ti.getFloorType().resource(),am-1);
+			DataBase.RemoveItemFromInventory(ID, Ti.getFloorType().resource(), 1);
+		}
+		if(tar.getMapObjectType()!=Ti.getMapObjectType())
+		{
+			Integer am=Inventory.get(Ti.getMapObjectType().resource());
+			if(am==null || am == 0) return false;
+			Inventory.put(Ti.getMapObjectType().resource(),am-1);
+			DataBase.RemoveItemFromInventory(ID, Ti.getMapObjectType().resource(), 1);
+		}
 		WorldMap.getInstance().update_tile(Ti);
 		return true;
 	}
@@ -159,7 +173,7 @@ public class Player implements MapObject {
 		{
 			if(Inventory.get(r)!=null) Inventory.put(r,Inventory.get(r)+1);
 			else Inventory.put(r,1);
-			//TODO Database Update inventory
+			DataBase.AddItemToInventory(ID, r);
 			add_event_to_stack(new Update(UpdateType.RESOURCES,r));
 		}
 		return true;
@@ -178,7 +192,7 @@ public class Player implements MapObject {
 		{
 			if(Inventory.get(r)!=null) Inventory.put(r,Inventory.get(r)+1);
 			else Inventory.put(r,1);
-			//TODO Database Update inventory
+			DataBase.AddItemToInventory(ID, r);
 			add_event_to_stack(new Update(UpdateType.RESOURCES,r));
 		}
 		return true;
@@ -243,6 +257,12 @@ public class Player implements MapObject {
 		else Inventory.put(Crafted,1);
 
 		add_event_to_stack(new Update(UpdateType.RESOURCES,Crafted));
+		return true;
+	}
+	
+	public boolean adjacent(Coordinate co)
+	{
+		if(C.distance(co)>1) return false;
 		return true;
 	}
 }

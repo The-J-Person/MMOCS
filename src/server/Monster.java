@@ -4,9 +4,21 @@ import java.util.Random;
 
 import common.*;
 
-public class Monster implements MapObject{
+public class Monster extends Thread implements MapObject{
+	public final static int MaxHP = 5;
+	public final static int wait = 5000;
 	Coordinate c;
-	int ID,Type,MaxHP,CurrentHP,Hunger;
+	int ID,Type,CurrentHP,Hunger;
+	
+	public Monster(int id,Coordinate Co)
+	{
+		c=Co;
+		CurrentHP=MaxHP;
+		Hunger = 1;
+		Type=0;
+		ID=id;
+		start();
+	}
 	
 	public String toString()
 	{
@@ -54,11 +66,6 @@ public class Monster implements MapObject{
 		this.Type = Type;
 	}
 	
-	public void setMaxHP(int MaxHP)
-	{
-		this.MaxHP = MaxHP;
-	}
-	
 	public void setCoordinate(Coordinate co)
 	{
 		c = new Coordinate(co);
@@ -86,13 +93,24 @@ public class Monster implements MapObject{
 	}
 	@Override
 	public int Health() {
-		// TODO Auto-generated method stub
-		return 0;
+		return CurrentHP;
 	}
 	@Override
 	public void Damage(int amount) {
 		CurrentHP=CurrentHP-amount;
-		
 	}
 
+	public void run()
+	{
+		while(CurrentHP>0)
+		{
+			try {
+				Thread.sleep(wait);
+			} catch (InterruptedException e) {
+				return;
+			}
+			WorldMap.getInstance().monsterattack(c, 1);
+			//Movement?
+		}
+	}
 }
