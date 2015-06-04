@@ -8,15 +8,11 @@ import java.util.Random;
 //import java.util.Scanner;
 import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
+import javax.mail.*;
 import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.NewsAddress;
-
+import javax.net.ssl.*;
 /**
  * 
  * 
@@ -36,6 +32,8 @@ public class Server extends Thread {
 
 	public static void main(String[] args) {
 		get_sender_email();
+		
+		//System.setProperty("javax.net.ssl.trustStore", "MOCSkey");
 
 		try {
 
@@ -207,8 +205,6 @@ public class Server extends Thread {
 					Update up = null;
 					Resource resource = null;
 					re = (Request) ois.readObject();
-					// resource = (Resource) re.getData(); //Why is this here,
-					// Ed?
 					System.out.println("Got request from " + this.getName()
 							+ " : " + re.getType() + "\n");
 
@@ -238,6 +234,7 @@ public class Server extends Thread {
 
 							break;
 						case CRAFT:
+							resource = (Resource) re.getData();
 							if (pl.craft(resource)) {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
