@@ -28,7 +28,6 @@ public class Monster extends Thread implements MapObject{
 	{
 		this.ID = ID;
 		this.Type = Type;
-		this.MaxHP = MaxHP;
 		this.c = new Coordinate(X,Y);
 		this.CurrentHP = CurrentHP;
 		this.Hunger = Hunger;

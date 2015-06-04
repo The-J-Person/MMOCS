@@ -86,8 +86,8 @@ public class Tile implements Serializable {
 	}
 	
 	public boolean canHarvest(){ 
-		return (mo != null && mo.canHarvest());
-	}
+		  return ((f!= null && f.canHarvest()) ||(mo != null && mo.canHarvest()));
+		 }
 	
 	public boolean canAttack(){
 		return (mo != null && mo.canAttack());
