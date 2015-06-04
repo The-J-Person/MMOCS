@@ -360,10 +360,10 @@ public class Server extends Thread {
 							break;
 
 						case UPDATE_TILE:
-							co = (Coordinate) re.getData();
-							Tile toChange = WorldMap.getInstance().get_tile_at(
-									co, true);
-							if (pl.change_Tile(toChange)) {
+							Tile changed = (Tile) re.getData();
+//							Tile toChange = WorldMap.getInstance().get_tile_at(
+//									co, true);
+							if (pl.change_Tile(changed)) {
 								oos.writeObject(new Update(
 										UpdateType.ACKNOWLEDGMENT,
 										new Acknowledgement(true,

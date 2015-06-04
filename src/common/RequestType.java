@@ -16,6 +16,6 @@ public enum RequestType {
 	
 	public boolean requireAck(){
 		return (this == MOVE || this == ATTACK || this == HARVEST || this == LOG_IN || this == REGISTER || this == CRAFT
-				|| this == CONFIRM); 
+				|| this == CONFIRM || this == UPDATE_TILE); 
 	}
 }

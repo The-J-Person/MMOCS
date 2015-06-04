@@ -126,7 +126,7 @@ public class Player implements MapObject {
 	}
 	
 	/**
-	 * Checks if player can see the Tile he asked to see.
+	 * Attempts to change a tile and returns true if successful.
 	 * @return
 	 */
 	public boolean change_Tile(Tile Ti)

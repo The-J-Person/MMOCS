@@ -199,21 +199,25 @@ public class WorldMap {
 	public int addmonster()
 	{
 		Random rndgen = new Random();
-		Coordinate co = null;
+		Coordinate co = new Coordinate(1,1);//null;
+		Tile t=new Tile(0,0,FloorType.DIRT,null);
 		int i,s=0;
-		while(co == null && s < 500) //500 is arbitrary number of cycles to prevent infinite loop
-		{
-			s++;
-			int rnd = rndgen.nextInt(map.size());
-			Enumeration<Tile> e = map.elements();
-			Tile t=new Tile(0,0);
-			i=0;
-			while(i<rnd) t=e.nextElement();
-			if(t.canMoveOn()) co=t.getCoordinate();
-		}
+//		while(co == null && s < 500) //500 is arbitrary number of cycles to prevent infinite loop
+//		{
+//			s++;
+//			int rnd = rndgen.nextInt(map.size());
+//			Enumeration<Tile> e = map.elements();
+//
+//			i=0;
+//			while(i<rnd) t=e.nextElement();
+//			if(t.canMoveOn()) co=t.getCoordinate();
+//		}
 		int ID = thingsOnMap.size();
 		Monster m = new Monster(ID,co);
+		t.setMapObjectType(MapObjectType.MONSTER);
 		thingsOnMap.put(co, m);
+		update_tile(t);
+		
 		return ID;
 	}
 	
